@@ -1,6 +1,13 @@
 <!DOCXHTML>
 <html>
+6cd21628-bf42-11ed-b3a3-73cadeb3473c
  <script>
+  function fun_check() {
+if (document.getElementById('checking').value=='6cd21628-bf42-11ed-b3a3-73cadeb3473c'){
+document.getElementById('checking').value='验证成功!'}
+else{document.getElementById('checking').value='没有此密钥!'
+}
+}
  </script>
  <head>
   <title>
@@ -36,9 +43,9 @@
    <text>
     今日密码:
    </text>
-   <input type="password" autocomplete="false" maxlength="20" minlength="2">
+   <input autocomplete="false" maxlength="1000" minlength="0" id="checking" name="checking">
     <a href="javaScript:void(0);">
-     <button>
+     <button name='check' id='chick' onclick='fun_check()'>
       提交
      </button> 
     </a>
@@ -53,4 +60,4 @@
 </html>
 <copyright>
  copyright <a href="/">sqxy090123</a> 2022-2023
- </copyright>
+</copyright>
