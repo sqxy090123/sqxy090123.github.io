@@ -4,11 +4,14 @@
  <script>
   function fun_check() {
 if (document.getElementById('checking').value=='6cd21628-bf42-11ed-b3a3-73cadeb3473c'){
-document.getElementById('checking').value='验证成功!', }
+document.getElementById('checking').value='验证成功!';
+}
 else{document.getElementById('checking').value='没有此密钥!'
 }
 }
-$('button').click(function () {$('div').css('display', 'block');});
+function show_hide_test_1() {
+document.getElementById("hidden_text_1").className="div_show";}
+
  </script>
  <head>
   <title>
@@ -57,7 +60,9 @@ $('button').click(function () {$('div').css('display', 'block');});
     游戏中心
    </a>
   </div>
- <div stile="display: none" id="hidden_1">
+ <div stile="display: none" id="hidden_text_1" class='div_hide'>
+ </div>
+  测试
  </body>
 </html>
 <copyright>
