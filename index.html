@@ -4,13 +4,15 @@
  <script>
   function fun_check() {
 if (document.getElementById('checking').value=='6cd21628-bf42-11ed-b3a3-73cadeb3473c'){
-document.getElementById('checking').value='验证成功!';
+alert('验证成功!');
+document.getElementById('checking').value='';
+document.getElmentById("hidden_text_1").className="div_show";
 }
-else{document.getElementById('checking').value='没有此密钥!'
+else{
+ alert('没有此密钥!')
+ document.getElementById('checking').value='';
 }
 }
-function show_hide_test_1() {
-document.getElementById("hidden_text_1").className="div_show";}
 
  </script>
  <head>
