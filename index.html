@@ -6,7 +6,8 @@
 if (document.getElementById('checking').value=='6cd21628-bf42-11ed-b3a3-73cadeb3473c'){
 alert('验证成功!');
 document.getElementById('checking').value='';
-document.getElementById("hidden_text_1").class="div_show";
+var show1=document.getElementById("hidden_text_1");
+show1.style.display="block";
 }
 else{
  alert('没有此密钥!')
@@ -62,7 +63,7 @@ else{
     游戏中心
    </a>
   </div>
- <div stile="display: none" id="hidden_text_1" class='div_hide'>
+ <div stile="display: hidden" id="hidden_text_1" class='div_hide'>
  </div>
   测试
  </body>
