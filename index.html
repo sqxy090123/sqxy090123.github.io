@@ -6,7 +6,7 @@
 if (document.getElementById('checking').value=='6cd21628-bf42-11ed-b3a3-73cadeb3473c'){
 alert('验证成功!');
 document.getElementById('checking').value='';
-document.getElementById("hidden_text_1").style.Display="block";
+document.getElementById("hidden_1").style.Display="block";
 }
 else{
  alert('没有此密钥!')
@@ -31,14 +31,15 @@ else{
     </h2>
    </button>
   </a>
-  <a href="https://github.com/sqxy090123">
-   <button>
-    <h2>
-     是启轩呀的GitHub
-    </h2>
-   </button>
-  </a>
-
+  <div>
+   <a href="https://github.com/sqxy090123">
+    <button>
+     <h2>
+      是启轩呀的GitHub
+     </h2>
+    </button>
+   </a>
+ </div>
   <div>
   </div>
    <h1>
@@ -55,7 +56,7 @@ else{
   </div>
   <div>
    <text>
-    今日密码:
+    访问代码:
    </text>
    <input autocomplete="false" maxlength="1000" minlength="0" id="checking" name="checking">
     <a href="javascript:show_hide_test_1()">
@@ -70,7 +71,7 @@ else{
     游戏中心
    </a>
   </div>
- <text style="Display: None" id="hidden_text_1">
+ <text style="Display: None" id="hidden_1">
   测试
  </text>
  </body>
