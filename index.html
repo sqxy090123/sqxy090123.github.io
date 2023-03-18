@@ -9,7 +9,7 @@ document.getElementById('checking').value='';
 document.getElementById("hidden_1").style.Display="block";
 }
 else{
- alert('没有此密钥!')
+ alert('没有密钥:';document.getElementById('checking').value);
  document.getElementById('checking').value='';
 }
 }
@@ -56,7 +56,7 @@ else{
   </div>
   <div>
    <text>
-    访问代码:
+    访问密钥:
    </text>
    <input autocomplete="false" maxlength="1000" minlength="0" id="checking" name="checking">
     <a href="script:show_hide_test()">
