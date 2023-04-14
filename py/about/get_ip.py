@@ -23,6 +23,8 @@ def about():
     return False
   if ck == "Lost":
     return __lost__()
+  if ck == "True":
+    return __check_pass__()
 
 def __lost__():
   all = []
