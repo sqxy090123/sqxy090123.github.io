@@ -25,48 +25,57 @@
 
       if (url) {
         const whitelist = [
-          'https://baidu.com',
-          'https://pan.baidu.com',
-          'https://yun.baidu.com',
-          'https://wangpan007.com',
-          'https://wpan.org',
-          'https://weiyun.com',
-          'https://cloud.189.cn',
-          'https://transfer.pcloud.com',
-          'https://dropbox.com',
-          'https://googledrive.com',
-          'https://onedrive.live.com',
-          'https://mega.nz',
-          'https://downcc.com',
-          'https://m.downcc.com',
-          'https://sqxy090123.github.io',
-          'https://github.com',
-          'https://gitee.com',
-          'https://gitee.io',
-          'https://gitlab.com',
-          'https://weixin.qq.com',
-          'https://qq.com',
-          'https://quark.com',
-          'https://www.bilibili.com',
-          'https://www.mi.com',
-          'https://www.meizu.com.cn',
-          'https://www.huawei.com/cn/',
-          'https://www.oppo.com/cn/',
-          'https://www.vivo.com',
-          'https://www.samsung.com/cn/',
-          'https://pan.quark.com',
-          'https://dl.pconline.com.cn',
-          'https://www.downza.cn',
-          'https://www.gamersky.com',
-          'https://game.ali213.net',
-          'https://www.3dmgame.com',
-          'https://www.xiaoyouxi88.com',
-          'https://www.csol.com',
-          'https://www.wanmei.com',
-          'https://hmcl.net'
+          'baidu.com',
+          'pan.baidu.com',
+          'yun.baidu.com',
+          'wangpan007.com',
+          'wpan.org',
+          'weiyun.com',
+          'cloud.189.cn',
+          'transfer.pcloud.com',
+          'dropbox.com',
+          'googledrive.com',
+          'onedrive.live.com',
+          'mega.nz',
+          'downcc.com',
+          'm.downcc.com',
+          'sqxy090123.github.io',
+          'github.com',
+          'gitee.com',
+          'gitee.io',
+          'gitlab.com',
+          'weixin.qq.com',
+          'qq.com',
+          'quark.com',
+          'www.bilibili.com',
+          'www.mi.com',
+          'www.meizu.com.cn',
+          'www.huawei.com',
+          'www.oppo.com',
+          'www.vivo.com',
+          'www.samsung.com',
+          'pan.quark.com',
+          'dl.pconline.com.cn',
+          'www.downza.cn',
+          'www.gamersky.com',
+          'game.ali213.net',
+          'www.3dmgame.com',
+          'www.xiaoyouxi88.com',
+          'www.csol.com',
+          'www.wanmei.com',
+          'hmcl.net'
         ];
-        // 判断 URL 是否在允许访问的网站列表中
-        if (whitelist.some(allowedUrl => url.startsWith(allowedUrl))) {
+        const blacklist = [
+          'freedirtygame.com',
+          'acg fabu.com'
+        ];
+        // 判断 URL 是否在黑名单中
+        const parsedUrl = new URL(url);
+        if (blacklist.some(disallowedDomain => parsedUrl.hostname.endsWith(`.${disallowedDomain}`))) {
+          // URL 在黑名单中，阻止跳转
+          alert(`您即将访问的网站 ${url} 被列为非法网站，无法访问`);
+          window.history.back(); // 返回上一级网址
+        } else if (whitelist.some(allowedDomain => parsedUrl.hostname.endsWith(`.${allowedDomain}`))) {
           // URL 在白名单中，可以直接跳转
           window.location.href = url;
         } else {
