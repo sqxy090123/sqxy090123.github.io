@@ -15,26 +15,21 @@
   <script>
     const queryString = window.location.search;
     if (queryString) {
-      const urlParams = new URLSearchParams(queryString);
+      const urlParams = new URLSearchParams(decodeURIComponent(queryString));
       const url = urlParams.get('url');
       if (url) {
         const whitelist = [
           'https://baidu.com',
-          'https://www.baidu.com',
-          'https://m.bilibili.com',
-          'https://bilibili.com',
           'https://pan.baidu.com',
           'https://sqxy090123.github.io',
           'https://github.com',
           'https://gitee.com',
           'https://pd.qq.com',
           'https://qq.com',
-          'https://quark.com',
-          'https://pan.quark.com',
-          'https://m.baidu.com'
+          'https://quark.com'
         ];
         // 判断 URL 是否在允许访问的网站列表中
-        if (whitelist.some(allowedUrl => url.startsWith(allowedUrl)))) {
+        if (whitelist.some(allowedUrl => url.startsWith(allowedUrl))) {
           // URL 在白名单中，可以直接跳转
           window.location.href = url;
         } else {
