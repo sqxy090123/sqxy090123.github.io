@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>TP网页</title>
+</head>
+<body>
+  <h1>欢迎访问TP网页</h1>
+  <p>请输入要访问的网址：</p>
+  <form>
+    <input type="text" name="url" placeholder="https://example.com">
+    <button type="submit">访问</button>
+  </form>
+
+  <script>
+    const queryString = window.location.search;
+    if (queryString) {
+      const urlParams = new URLSearchParams(queryString);
+      const url = urlParams.get('url');
+      if (url) {
+        const whitelist = [
+          'https://baidu.com',
+          'https://www.baidu.com',
+          'https://m.bilibili.com',
+          'https://bilibili.com',
+          'https://pan.baidu.com',
+          'https://sqxy090123.github.io',
+          'https://github.com',
+          'https://gitee.com',
+          'https://pd.qq.com',
+          'https://qq.com',
+          'https://quark.com',
+          'https://pan.quark.com',
+          'https://m.baidu.com',
+        ];
+        // 判断 URL 是否在允许访问的网站列表中
+        if (whitelist.some(allowedUrl => url.startsWith(allowedUrl)))) {
+          // URL 在白名单中，可以直接跳转
+          window.location.href = url;
+        } else {
+          // URL 不在白名单中，弹出警告框
+          const message = `您即将访问的网站 ${url} 可能存在风险，是否继续访问？`;
+          if (confirm(message)) {
+            window.location.href = url;
+          } else {
+            window.history.back(); // 返回上一级网址
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
