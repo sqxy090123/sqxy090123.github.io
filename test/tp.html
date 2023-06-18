@@ -16,17 +16,54 @@
     const queryString = window.location.search;
     if (queryString) {
       const urlParams = new URLSearchParams(decodeURIComponent(queryString));
-      const url = urlParams.get('url');
+      let url = urlParams.get('url');
+      
+      // 如果 URL 没有 http 或 https 前缀，则自动添加 http 前缀
+      if (!/^https?:\/\//i.test(url)) {
+        url = `http://${url}`;
+      }
+
       if (url) {
         const whitelist = [
           'https://baidu.com',
           'https://pan.baidu.com',
+          'https://yun.baidu.com',
+          'https://wangpan007.com',
+          'https://wpan.org',
+          'https://weiyun.com',
+          'https://cloud.189.cn',
+          'https://transfer.pcloud.com',
+          'https://dropbox.com',
+          'https://googledrive.com',
+          'https://onedrive.live.com',
+          'https://mega.nz',
+          'https://downcc.com',
+          'https://m.downcc.com',
           'https://sqxy090123.github.io',
           'https://github.com',
           'https://gitee.com',
-          'https://pd.qq.com',
+          'https://gitee.io',
+          'https://gitlab.com',
+          'https://weixin.qq.com',
           'https://qq.com',
-          'https://quark.com'
+          'https://quark.com',
+          'https://www.bilibili.com',
+          'https://www.mi.com',
+          'https://www.meizu.com.cn',
+          'https://www.huawei.com/cn/',
+          'https://www.oppo.com/cn/',
+          'https://www.vivo.com',
+          'https://www.samsung.com/cn/',
+          'https://pan.quark.com',
+          'https://dl.pconline.com.cn',
+          'https://www.downza.cn',
+          'https://www.gamersky.com',
+          'https://game.ali213.net',
+          'https://www.3dmgame.com',
+          'https://www.xiaoyouxi88.com',
+          'https://www.csol.com',
+          'https://www.wanmei.com',
+          'https://hmcl.net'
         ];
         // 判断 URL 是否在允许访问的网站列表中
         if (whitelist.some(allowedUrl => url.startsWith(allowedUrl))) {
