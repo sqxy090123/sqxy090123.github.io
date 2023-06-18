@@ -15,6 +15,42 @@
     }
    }
   </script>
+  <script>
+  window.onload = function() {
+   // 获取当前 URL 中的查询字符串部分
+   var queryString = window.location.search;
+   // 创建 URLSearchParams 对象
+   var searchParams = new URLSearchParams(queryString);
+   // 创建一个空的对象，用于存储参数名和值
+   var params = {};
+   // 遍历所有参数，将参数名和值保存在对象中
+   for (var entry of searchParams.entries()) {
+       var key = entry[0];
+       var value = entry[1];
+       if var key == "key"{
+           if var value == "sqxstill912"{
+              window.open = "https://example.com"
+           }
+       };
+    
+       params[key] = value;
+   }
+   // 将对象中的参数名和值拼接成字符串
+   var paramsString = "";
+   for (var key in params) {
+       if (params.hasOwnProperty(key)) {
+           paramsString += key + "(" + params[key] + ")" + ",";
+       }
+   }
+   // 去掉最后一个逗号
+   paramsString = paramsString.slice(0, -1);
+   // 在页面中显示参数名和值
+   var paramsDiv = documentcreateElement("div");
+   paramsDiv.innerHTML = paramsString;
+   document.body.appendChild(paramsDiv);
+}
+ 
+   </script>
   <style>
    copyright {text-align:center}
   </style>
