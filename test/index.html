@@ -25,11 +25,14 @@
          // 校验输入框的内容
          function checkKey() {
             const inputKey = document.getElementById('key').value;
-            if (inputKey === '黄油0' || inputKey === '?key=黄油0') {
+            if (inputKey === 'sqxstill912') {
+               window.location.href = 'https://example.com';
+            } else if (inputKey === '黄油0') {
                window.location.href = 'http://mx1.yiciyuan.vip/';
-            } else {
+            } else if (inputKey === '黄油') {
+               window.location.href = 'https://south.yuanacg.com'
+            }else {
                alert('验证失败，请重新输入密钥！');
-               document.getElementById('key').value = '';
             }
          }
       </script>
