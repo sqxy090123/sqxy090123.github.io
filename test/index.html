@@ -31,6 +31,13 @@
                document.getElementById('key').value = '';
             }
          }
+
+         // 页面加载时自动执行一次密钥校验
+         window.onload = function() {
+            if (document.getElementById('key').value) {
+               checkKey();
+            }
+         };
       </script>
    </body>
 </html>
