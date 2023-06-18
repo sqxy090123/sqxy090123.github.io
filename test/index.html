@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+   <head>
+      <meta charset="UTF-8">
+      <title>校验输入框</title>
+   </head>
+   <body>
+      <form>
+         <label for="key">访问密钥：</label>
+         <input type="text" id="key" name="key"><br><br>
+         <button type="button" onclick="checkKey()">校验</button>
+      </form>
+      <script>
+         // 获取 URL 查询参数中的密钥并填充到输入框中
+         const queryString = window.location.search;
+         if (queryString) {
+            const urlParams = new URLSearchParams(queryString);
+            const key = urlParams.get('key');
+            if (key) {
+               document.getElementById('key').value = key;
+            }
+         }
+
+         // 校验输入框的内容
+         function checkKey() {
+            const inputKey = document.getElementById('key').value;
+            if (inputKey === 'sqxstill912') {
+               window.location.href = 'https://example.com';
+            } else {
+               alert('验证失败，请重新输入密钥！');
+               document.getElementById('key').value = '';
+            }
+         }
+      </script>
+   </body>
+</html>
