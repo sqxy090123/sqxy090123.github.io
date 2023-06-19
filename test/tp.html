@@ -1,50 +1,52 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8">
-    <title>提示</title>
-  </head>
-  <body>
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      let tp = params.get('tp');
-      const host = params.get('host');
-      const url = params.get('url');
+<head>
+  <meta charset="UTF-8">
+  <title>提示</title>
+</head>
+<body>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  let tp = params.get('tp');
+  const host = params.get('host');
+  const url = params.get('url');
 
-      if (!host) {
-        document.title = 'Forbidden';  // 将标题设置为 "Forbidden"
-        const html = `
-          <div>
-            <h1>403 Forbidden</h1>
-          </div>
-          <h3>Host input Error</h3>
-        `;
-        document.body.innerHTML = html;
-      } else {
-        if (!tp) {
-          tp = 'http://';
-        }
-        if (!url) {
-          url = '/'
-        }
+  if (!host) {
+    document.title = 'Forbidden';
+    const html = `
+      <div>
+        <h1>403 Forbidden</h1>
+      </div>
+      <h3>Host input Error</h3>
+    `;
+    document.body.innerHTML = html;
+  } else {
+    if (!tp) {
+      tp = 'http://';
+    }
+    if (!url) {
+      url = '/'
+    }
 
-        const message = `您正在前往${tp}${host}${url}，该网址非官方网站，是否前往？`;
-        const html = `
-          <div>${message}</div>
-          <button onclick="goBack()">返回</button>
-          <button onclick="goForward()">前往</button>
-        `;
+    const destination = `${tp}${host}${url}`; // 拼接出目标地址
 
-        document.body.innerHTML = html;
+    const message = `您正在前往${destination}，该网址非官方网站，是否前往？`;
+    const html = `
+      <div>${message}</div>
+      <button onclick="goBack()">返回</button>
+      <button onclick="goForward()">前往</button>
+    `;
 
-        function goBack() {
-          history.back();
-        }
+    document.body.innerHTML = html;
 
-        function goForward() {
-          window.location.href = `${tp}${host}${url}`;
-        }
-      }
-    </script>
-  </body>
+    function goBack() {
+      history.back();
+    }
+
+    function goForward() {
+      window.location.href = destination; // 直接使用拼接后的地址
+    }
+  }
+</script>
+</body>
 </html>
