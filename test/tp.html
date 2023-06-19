@@ -19,8 +19,10 @@
       let url = urlParams.get('url');
 
       // 如果 URL 没有 http 或 https 前缀，则自动添加 http 前缀
-      if (!/^https?:\/\//i.test(url)) {
-        url = `http://${url}`;
+      if (/^https?:\/\//i.test(url)) {
+        url = url.slice(7);
+      } else {
+        url = url.slice(5);
       }
 
       let urlParts = url.split('/');
