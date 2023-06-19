@@ -20,8 +20,7 @@
           <h3>Host input Error</h3>
         
         `;
-        document.write('403 Permission Denied');
-        document.close();
+        document.body.innerHTML = html;
       } else {
         if (!tp) {
           tp = 'http://';
