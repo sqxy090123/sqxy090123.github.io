@@ -7,46 +7,46 @@
 <body>
 <script>
   const params = new URLSearchParams(window.location.search);
-  let tp = params.get('tp');
-  const host = params.get('host');
-  const url = params.get('url');
+let tp = params.get('tp');
+const host = params.get('host');
+const url = params.get('url');
 
-  if (!host) {
-    document.title = 'Forbidden';
-    const html = `
-      <div>
-        <h1>403 Forbidden</h1>
-      </div>
-      <h3>Host input Error</h3>
-    `;
-    document.body.innerHTML = html;
-  } else {
-    if (!tp) {
-      tp = 'http://';
-    }
-    if (!url) {
-      url = '/'
-    }
-
-    const destination = `${tp}${host}${url}`; // 拼接出目标地址
-
-    const message = `您正在前往${destination}，该网址非官方网站，是否前往？`;
-    const html = `
-      <div>${message}</div>
-      <button onclick="goBack()">返回</button>
-      <button onclick="goForward()">前往</button>
-    `;
-
-    document.body.innerHTML = html;
-
-    function goBack() {
-      history.back();
-    }
-
-    function goForward() {
-      window.location.href = destination; // 直接使用拼接后的地址
-    }
+if (!host) {
+  document.title = 'Forbidden';
+  const html = `
+    <div>
+      <h1>403 Forbidden</h1>
+    </div>
+    <h3>Host input Error</h3>
+  `;
+  document.body.innerHTML = html;
+} else {
+  if (!tp) {
+    tp = '/';
   }
+  if (!url) {
+    url = '/'
+  }
+
+  const destination = `${tp}${host}${url}`; // 拼接出目标地址
+
+  const message = `您正在前往${destination}，该网址非官方网站，是否前往？`;
+  const html = `
+    <div>${message}</div>
+    <button onclick="goBack()">返回</button>
+    <button onclick="goForward()">前往</button>
+  `;
+
+  document.body.innerHTML = html;
+
+  function goBack() {
+    history.back();
+  }
+
+  function goForward() {
+    window.location.href = `http://${host}/`; // 只使用 host 参数跳转
+  }
+}
 </script>
 </body>
 </html>
