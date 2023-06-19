@@ -61,7 +61,6 @@
 
     const urlForm = document.querySelector('#urlForm');
     urlForm.addEventListener('submit', function(event) {
-      event.preventDefault(); // 阻止表单默认提交行为
       const inputUrl = document.querySelector('input[name="url"]').value;
       let url = '';
       if (/^https?:\/\//i.test(inputUrl)) {
