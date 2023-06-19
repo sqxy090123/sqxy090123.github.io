@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>提示</title>
   </head>
   <body>
@@ -12,13 +12,12 @@
       const url = params.get('url');
 
       if (!host) {
+        document.title = 'Forbidden';  // 将标题设置为 "Forbidden"
         const html = `
-          <title>Forbidden</title>
           <div>
             <h1>403 Forbidden</h1>
           </div>
           <h3>Host input Error</h3>
-        
         `;
         document.body.innerHTML = html;
       } else {
