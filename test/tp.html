@@ -18,6 +18,9 @@
         if (!tp) {
           tp = 'http://';
         }
+        if (!url) {
+          url = '/'
+        }
 
         const message = `您正在前往${tp}${host}${url}，该网址非官方网站，是否前往？`;
         const html = `
