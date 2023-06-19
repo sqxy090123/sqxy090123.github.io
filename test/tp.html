@@ -7,90 +7,88 @@
 <body>
   <h1>欢迎访问TP网页</h1>
   <p>请输入要访问的网址：</p>
-  <form>
+  <form id="urlForm">
     <input type="text" name="url" placeholder="https://example.com">
     <button type="submit">访问</button>
   </form>
 
   <script>
-    const queryString = window.location.search;
-    if (queryString) {
-      const urlParams = new URLSearchParams(decodeURIComponent(queryString));
-      let url = urlParams.get('url');
+    const whitelist = [
+      'baidu.com',
+      'pan.baidu.com',
+      'yun.baidu.com',
+      'wangpan007.com',
+      'wpan.org',
+      'weiyun.com',
+      'cloud.189.cn',
+      'transfer.pcloud.com',
+      'dropbox.com',
+      'googledrive.com',
+      'onedrive.live.com',
+      'mega.nz',
+      'downcc.com',
+      'm.downcc.com',
+      'sqxy090123.github.io',
+      'github.com',
+      'gitee.com',
+      'gitee.io',
+      'gitlab.com',
+      'weixin.qq.com',
+      'qq.com',
+      'quark.com',
+      'www.bilibili.com',
+      'www.mi.com',
+      'www.meizu.com.cn',
+      'www.huawei.com',
+      'www.oppo.com',
+      'www.vivo.com',
+      'www.samsung.com',
+      'pan.quark.com',
+      'dl.pconline.com.cn',
+      'www.downza.cn',
+      'www.gamersky.com',
+      'game.ali213.net',
+      'www.3dmgame.com',
+      'www.xiaoyouxi88.com',
+      'www.csol.com',
+      'www.wanmei.com',
+      'hmcl.net'
+    ];
+    const blacklist = [
+      'freedirtygame.com',
+      'acgfabu.com'
+    ];
 
-      // 如果 URL 没有 http 或 https 前缀，则自动添加 http 前缀
-      if (/^https?:\/\//i.test(url)) {
-        url = url.slice(7);
+    const urlForm = document.querySelector('#urlForm');
+    urlForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // 阻止表单默认提交行为
+      const inputUrl = document.querySelector('input[name="url"]').value;
+      let url = '';
+      if (/^https?:\/\//i.test(inputUrl)) {
+        url = inputUrl;
       } else {
-        url = url.slice(5);
+        url = 'http://' + inputUrl;
       }
 
-      if (url) {
-        const whitelist = [
-          'baidu.com',
-          'pan.baidu.com',
-          'yun.baidu.com',
-          'wangpan007.com',
-          'wpan.org',
-          'weiyun.com',
-          'cloud.189.cn',
-          'transfer.pcloud.com',
-          'dropbox.com',
-          'googledrive.com',
-          'onedrive.live.com',
-          'mega.nz',
-          'downcc.com',
-          'm.downcc.com',
-          'sqxy090123.github.io',
-          'github.com',
-          'gitee.com',
-          'gitee.io',
-          'gitlab.com',
-          'weixin.qq.com',
-          'qq.com',
-          'quark.com',
-          'www.bilibili.com',
-          'www.mi.com',
-          'www.meizu.com.cn',
-          'www.huawei.com',
-          'www.oppo.com',
-          'www.vivo.com',
-          'www.samsung.com',
-          'pan.quark.com',
-          'dl.pconline.com.cn',
-          'www.downza.cn',
-          'www.gamersky.com',
-          'game.ali213.net',
-          'www.3dmgame.com',
-          'www.xiaoyouxi88.com',
-          'www.csol.com',
-          'www.wanmei.com',
-          'hmcl.net'
-        ];
-        const blacklist = [
-          'freedirtygame.com',
-          'acgfabu.com'
-        ];
-        // 判断 URL 的 hostname 是否以白名单中的域名结尾
-        const parsedUrl = new URL(url);
-        if (whitelist.some(allowedDomain => parsedUrl.hostname.endsWith(`.${allowedDomain}`))) {
-          // URL 在白名单中，直接跳转
+      // 判断 URL 的 hostname 是否以白名单中的域名结尾
+      const parsedUrl = new URL(url);
+      if (whitelist.some(allowedDomain => parsedUrl.hostname.endsWith(`.${allowedDomain}`))) {
+        // URL 在白名单中，直接跳转
+        window.location.href = url;
+      } else if (blacklist.some(disallowedDomain => parsedUrl.hostname.endsWith(`.${disallowedDomain}`))) {
+        // URL 在黑名单中，阻止跳转
+        alert(`您即将访问的网站 ${parsedUrl.hostname} 被列为非法网站，无法访问`);
+        window.history.back(); // 返回上一级网址
+      } else {
+        // URL 不在黑名单也不在白名单中，提示用户可以选择是否跳转
+        const confirmResult = confirm(`您即将访问的网站 ${parsedUrl.hostname} 不在访问白名单中，风险自负。是否继续访问？`);
+        if (confirmResult) {
           window.location.href = url;
-        } else if (blacklist.some(disallowedDomain => parsedUrl.hostname.endsWith(`.${disallowedDomain}`))) {
-          // URL 在黑名单中，阻止跳转
-          alert(`您即将访问的网站 ${parsedUrl.hostname} 被列为非法网站，无法访问`);
-          window.history.back(); // 返回上一级网址
         } else {
-          // URL 不在黑名单也不在白名单中，提示用户可以选择是否跳转
-          const confirmResult = confirm(`您即将访问的网站 ${parsedUrl.hostname} 不在访问白名单中，风险自负。是否继续访问？`);
-          if (confirmResult) {
-            window.location.href = url;
-          } else {
-            window.history.back();
-          }
+          window.history.back();
         }
       }
-    }
+    });
   </script>
 </body>
 </html>
