@@ -12,6 +12,14 @@
       const url = params.get('url');
 
       if (!host) {
+        const html = `
+          <title>Forbidden</title>
+          <div>
+            <h1>403 Forbidden</h1>
+          </div>
+          <h3>Host input Error</h3>
+        
+        `;
         document.write('403 Permission Denied');
         document.close();
       } else {
