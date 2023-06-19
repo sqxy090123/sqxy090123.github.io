@@ -17,11 +17,20 @@
     if (queryString) {
       const urlParams = new URLSearchParams(decodeURIComponent(queryString));
       let url = urlParams.get('url');
-      
+
       // 如果 URL 没有 http 或 https 前缀，则自动添加 http 前缀
       if (!/^https?:\/\//i.test(url)) {
         url = `http://${url}`;
       }
+
+      let urlParts = url.split('/');
+      urlParts[0] = urlParts[0].replace(/^https?:/i, '');
+      let baseUrl = urlParts[0];
+      urlParts[0] = 'http:';
+      if (/^https:/i.test(url)) {
+        urlParts[0] = 'https:';
+      }
+      url = urlParts.join('/');
 
       if (url) {
         const whitelist = [
