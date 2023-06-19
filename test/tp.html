@@ -25,15 +25,6 @@
         url = url.slice(5);
       }
 
-      let urlParts = url.split('/');
-      urlParts[0] = urlParts[0].replace(/^https?:/i, '');
-      let baseUrl = urlParts[0];
-      urlParts[0] = 'http:';
-      if (/^https:/i.test(url)) {
-        urlParts[0] = 'https:';
-      }
-      url = urlParts.join('/');
-
       if (url) {
         const whitelist = [
           'baidu.com',
@@ -80,22 +71,22 @@
           'freedirtygame.com',
           'acgfabu.com'
         ];
-        // 判断 URL 是否在黑名单中
+        // 判断 URL 的 hostname 是否以白名单中的域名结尾
         const parsedUrl = new URL(url);
-        if (blacklist.some(disallowedDomain => parsedUrl.hostname.endsWith(`.${disallowedDomain}`))) {
-          // URL 在黑名单中，阻止跳转
-          alert(`您即将访问的网站 ${url} 被列为非法网站，无法访问`);
-          window.history.back(); // 返回上一级网址
-        } else if (whitelist.some(allowedDomain => parsedUrl.hostname.endsWith(`.${allowedDomain}`))) {
-          // URL 在白名单中，可以直接跳转
+        if (whitelist.some(allowedDomain => parsedUrl.hostname.endsWith(`.${allowedDomain}`))) {
+          // URL 在白名单中，直接跳转
           window.location.href = url;
+        } else if (blacklist.some(disallowedDomain => parsedUrl.hostname.endsWith(`.${disallowedDomain}`))) {
+          // URL 在黑名单中，阻止跳转
+          alert(`您即将访问的网站 ${parsedUrl.hostname} 被列为非法网站，无法访问`);
+          window.history.back(); // 返回上一级网址
         } else {
-          // URL 不在白名单中，弹出警告框
-          const message = `您即将访问的网站 ${url} 可能存在风险，是否继续访问？`;
-          if (confirm(message)) {
+          // URL 不在黑名单也不在白名单中，提示用户可以选择是否跳转
+          const confirmResult = confirm(`您即将访问的网站 ${parsedUrl.hostname} 不在访问白名单中，风险自负。是否继续访问？`);
+          if (confirmResult) {
             window.location.href = url;
           } else {
-            window.history.back(); // 返回上一级网址
+            window.history.back();
           }
         }
       }
