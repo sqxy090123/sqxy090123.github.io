@@ -33,7 +33,7 @@
     }
 
     function goForward() {
-      if (url.startsWith("http://") || url.startsWith("https://")) {
+      if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("ftp://")) {
         window.location.href = `${url}`;
       } else {
         window.location.href = `http://${url}/`;
