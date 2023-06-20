@@ -9,37 +9,37 @@
   const params = new URLSearchParams(window.location.search);
   let url = params.get('url');
 
-if (!url) {
-  document.title = 'Forbidden';
-  const html = `
-    <div>
-      <h1>403 Forbidden</h1>
-    </div>
-    <h3>Host input Error</h3>
-  `;
-  document.body.innerHTML = html;
-else{
-  const message = `您正在前往${url}，该网址非官方网站，是否前往？`;
-  const html = `
-    <h1><div>${message}</div></h1>
-    <h3><button onclick="goBack()">返回</button>
-    <button onclick="goForward()">前往</button></h3>
-  `;
+  if (!url) {
+    document.title = 'Forbidden';
+    const html = `
+      <div>
+        <h1>403 Forbidden</h1>
+      </div>
+      <h3>Host input Error</h3>
+    `;
+    document.body.innerHTML = html;
+  } else {
+    const message = `您正在前往 ${url}，该网址非官方网站，是否前往？`;
+    const html = `
+      <h1><div>${message}</div></h1>
+      <h3><button onclick="goBack()">返回</button>
+      <button onclick="goForward()">前往</button></h3>
+    `;
 
-  document.body.innerHTML = html;
+    document.body.innerHTML = html;
 
-  function goBack() {
-    history.back();
-  }
+    function goBack() {
+      history.back();
+    }
 
-  function goForward() {
-    if ("http://" in url) or ("https://" in url){
-      window.location.href = `${url}`;
-    }else{
-    window.location.href = `http://${url}/`; // 
+    function goForward() {
+      if (url.startsWith("http://") || url.startsWith("https://")) {
+        window.location.href = `${url}`;
+      } else {
+        window.location.href = `http://${url}/`;
+      }
     }
   }
-}
 </script>
 </body>
 </html>
