@@ -7,11 +7,9 @@
 <body>
 <script>
   const params = new URLSearchParams(window.location.search);
-let tp = params.get('tp');
-const host = params.get('host');
-const url = params.get('url');
+  let url = params.get('url');
 
-if (!host) {
+if (!url) {
   document.title = 'Forbidden';
   const html = `
     <div>
@@ -20,21 +18,12 @@ if (!host) {
     <h3>Host input Error</h3>
   `;
   document.body.innerHTML = html;
-} else {
-  if (!tp) {
-    tp = '/';
-  }
-  if (!url) {
-    url = '/'
-  }
-
-  const destination = `${tp}${host}${url}`; // 拼接出目标地址
-
-  const message = `您正在前往${destination}，该网址非官方网站，是否前往？`;
+else{
+  const message = `您正在前往${url}，该网址非官方网站，是否前往？`;
   const html = `
-    <div>${message}</div>
-    <button onclick="goBack()">返回</button>
-    <button onclick="goForward()">前往</button>
+    <h1><div>${message}</div></h1>
+    <h3><button onclick="goBack()">返回</button>
+    <button onclick="goForward()">前往</button></h3>
   `;
 
   document.body.innerHTML = html;
@@ -44,7 +33,11 @@ if (!host) {
   }
 
   function goForward() {
-    window.location.href = `http://${host}/`; // 只使用 host 参数跳转
+    if ("http://" in url) or ("https://" in url){
+      window.location.href = `${url}`;
+    }else{
+    window.location.href = `http://${url}/`; // 
+    }
   }
 }
 </script>
