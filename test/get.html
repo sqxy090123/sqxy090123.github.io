@@ -6,77 +6,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <button onclick="getDeviceInfo()">开始获取</button>
+  <button id="get-info-button">开始获取</button>
   <p id="result"></p>
 
   <script type="text/javascript">
-    function getDeviceInfo() {
-      var browser = navigator.userAgent;
-      var os = navigator.platform;
-      var screenWidth = window.screen.width;
-      var screenHeight = window.screen.height;
-      var usableScreenWidth = window.screen.availWidth;
-      var usableScreenHeight = window.screen.availHeight;
-      var dpr = window.devicePixelRatio || 1;
-      var isMobile = /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent);
-      var isOnline = navigator.onLine;
-      var language = navigator.language;
-      var orientation = window.orientation;
-      
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
+    var getInfoButton = document.getElementById("get-info-button");
+    var result = document.getElementById("result");
 
-        var result = "浏览器：" + browser + "<br>";
-        result += "操作系统：" + os + "<br>";
-        result += "屏幕分辨率：" + screenWidth + " x " + screenHeight + "<br>";
-        result += "可用屏幕尺寸：" + usableScreenWidth + " x " + usableScreenHeight + "<br>";
-        result += "设备像素比：" + dpr + "<br>";
-        result += "设备类型：" + (isMobile ? "移动设备" : "桌面设备") + "<br>";
-        result += "网络连接状态：" + (isOnline ? "已连接" : "未连接") + "<br>";
-        result += "语言设置：" + language + "<br>";
-        result += "当前位置经纬度：" + latitude + ", " + longitude + "<br>";
-        
-        if (orientation === 0) {
-          result += "#竖直屏幕状态" + "<br>";
-        } else if (orientation === 90) {
-          result += "#向左横屏状态" + "<br>";
-        } else if (orientation === -90) {
-          result += "#向右横屏状态" + "<br>";
-        } else if (orientation === 180) {
-          result += "#倒置屏幕状态" + "<br>";
-        }
-        
-        document.getElementById("result").innerHTML = result;
-      });
-      
-        navigator.getBattery().then(function(battery) {
-          var result = result
-          var level = battery.level * 100 + "%"; // 电量百分比
-          var charging = battery.charging; // 是否正在充电
-          var chargingTime = battery.chargingTime; // 剩余充电时间（秒），-1 表示未知
-          var dischargingTime = battery.dischargingTime; // 剩余放电时间（秒），-1 表示未知
-          result += "电量百分比：" + level + "<br>";
-          result += "是否正在充电：" + (charging ? "是" : "否") + "<br>";
-          result += "剩余充电时间：" + (chargingTime === Infinity ? "未知" : chargingTime + " 秒") + "<br>";
-          result += "剩余放电时间：" + (dischargingTime === Infinity ? "未知" : dischargingTime + " 秒") + "<br>";
-        };
-        document.getElementById("result").innerHTML = result;
-      };
-
-    function getGamepads() {
-      var gamepads = navigator.getGamepads();
-      for (var i = 0; i < gamepads.length; i++) {
-        if (gamepads[i]) {
-          var id = gamepads[i].id;
-          var index = gamepads[i].index;
-          // 进一步处理游戏手柄信息
-        }
-      }
+    if (!navigator) {
+      result.innerHTML = "浏览器不支持该功能。";
+      getInfoButton.disabled = true;
     }
 
+    function getDeviceInfo() {
+      var browser = navigator.userAgent || "";
+      var os = navigator.platform || "";
+      var screenWidth = window.screen ? window.screen.width : "";
+      var screenHeight = window.screen ? window.screen.height : "";
+      var usableScreenWidth = window.screen ? window.screen.availWidth : "";
+      var usableScreenHeight = window.screen ? window.screen.availHeight : "";
+      var dpr = window.devicePixelRatio || 1;
+      var isMobile = /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent);
+      var isOnline = navigator.onLine || false;
+      var language = navigator.language || "";
+      var orientation = getOrientation();
+      var pos = getPosition();
 
-    window.addEventListener("orientationchange", checkOrientation, false);
+      var info = [];
+      info.push("浏览器：" + browser);
+      info.push("操作系统：" + os);
+      info.push("屏幕分辨率：" + screenWidth + " x " + screenHeight);
+      info.push("可用屏幕尺寸：" + usableScreenWidth + " x " + usableScreenHeight);
+      info.push("设备像素比：" + dpr);
+      info.push("设备类型：" + (isMobile ? "移动设备" : "桌面设备"));
+      info.push("网络连接状态：" + (isOnline ? "已连接" : "未连接"));
+      info.push("语言设置：" + language);
+      info.push("当前位置经纬度：" + pos.lat + ", " + pos.lng);
+
+      if (orientation === 0) {
+        info.push("#竖直屏幕状态");
+      } else if (orientation === 90) {
+        info.push("#向左横屏状态");
+      } else if (orientation === -90) {
+        info.push("#向右横屏状态");
+      } else if (orientation === 180) {
+        info.push("#倒置屏幕状态");
+      }
+      
+      result.innerHTML = info.join("<br>");
+    }
+
+    function getOrientation() {
+      var orientation = window.orientation || 0;
+      if (screen && screen.orientation && screen.orientation.angle !== undefined) {
+        orientation = screen.orientation.angle;
+      }
+      return orientation;
+    }
+
+    function getPosition() {
+      var pos = { lat: "", lng: "" };
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          pos.lat = position.coords.latitude;
+          pos.lng = position.coords.longitude;
+        }, function(error) {
+          // 获取位置信息失败，不做任何处理
+        });
+      }
+      return pos;
+    }
+
+    getInfoButton.onclick = getDeviceInfo;
+
   </script>
 </body>
 </html>
