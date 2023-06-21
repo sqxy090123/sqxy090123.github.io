@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>获取设备信息</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获取设备信息</title>
   <style>
+    body {
+      -webkit-touch-callout: none; /* iOS长按不选择文本 */
+      -webkit-user-select: none; /* 禁止选择文本 */
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
     #get-info-button {
       background-color: green;
       color: white;
@@ -12,6 +20,21 @@
 
     #get-info-button.stop {
       background-color: red;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 30px;
+      width: 100%;
+      height: 50px;
+      line-height: 50px;
+      background-color: #f5f5f5;
+      text-align: center;
+      font-size: 16px;
+    }
+    .footer a {
+      color: #337ab7;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -113,7 +136,7 @@
 
     getInfoButton.onclick = function() {
       if (!intervalId) {
-        intervalId = setInterval(getDeviceInfo, 10);
+        intervalId = setInterval(getDeviceInfo, 1000);
         getInfoButton.innerHTML = "停止获取";
         getInfoButton.classList.add("stop");
       } else {
@@ -125,6 +148,15 @@
       }
     };
 
+    document.addEventListener("copy", function(e) {
+      e.preventDefault();
+      alarm("复制已被禁用");
+    });
+
   </script>
+
+  <div class="footer">
+    <p>&copy; <a href="https://sqxy090123.github.io/" target="_blank">sqxy090123</a> 2023</p>
+  </div>
 </body>
 </html>
