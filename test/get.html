@@ -38,29 +38,31 @@
         result += "当前位置经纬度：" + latitude + ", " + longitude + "<br>";
         
         if (orientation === 0) {
-          result += "#竖屏状态" + "<br>";
+          result += "#竖直屏幕状态" + "<br>";
         } else if (orientation === 90) {
           result += "#向左横屏状态" + "<br>";
         } else if (orientation === -90) {
           result += "#向右横屏状态" + "<br>";
+        } else if (orientation === 180) {
+          result += "#倒置屏幕状态" + "<br>";
         }
-        document.getElementById("result").innerHTML = result;
-      });
-      
-      navigator.getBattery().then(function(battery) {
-        var result = document.getElementById("result").innerHTML;
-        var level = battery.level * 100 + "%"; // 电量百分比
-        var charging = battery.charging; // 是否正在充电
-        var chargingTime = battery.chargingTime; // 剩余充电时间（秒），-1 表示未知
-        var dischargingTime = battery.dischargingTime; // 剩余放电时间（秒），-1 表示未知
-        result += "电量百分比：" + level + "<br>";
-        result += "是否正在充电：" + (charging ? "是" : "否") + "<br>";
-        result += "剩余充电时间：" + (chargingTime === Infinity ? "未知" : chargingTime + " 秒") + "<br>";
-        result += "剩余放电时间：" + (dischargingTime === Infinity ? "未知" : dischargingTime + " 秒") + "<br>";
         
         document.getElementById("result").innerHTML = result;
       });
-    }
+      
+        navigator.getBattery().then(function(battery) {
+          var result = document.getElementById("result").innerHTML;
+          var level = battery.level * 100 + "%"; // 电量百分比
+          var charging = battery.charging; // 是否正在充电
+          var chargingTime = battery.chargingTime; // 剩余充电时间（秒），-1 表示未知
+          var dischargingTime = battery.dischargingTime; // 剩余放电时间（秒），-1 表示未知
+          result += "电量百分比：" + level + "<br>";
+          result += "是否正在充电：" + (charging ? "是" : "否") + "<br>";
+          result += "剩余充电时间：" + (chargingTime === Infinity ? "未知" : chargingTime + " 秒") + "<br>";
+          result += "剩余放电时间：" + (dischargingTime === Infinity ? "未知" : dischargingTime + " 秒") + "<br>";
+        };
+        document.getElementById("result").innerHTML = result;
+      };
 
     function getGamepads() {
       var gamepads = navigator.getGamepads();
