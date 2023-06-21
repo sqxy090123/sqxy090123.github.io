@@ -113,7 +113,7 @@
 
     getInfoButton.onclick = function() {
       if (!intervalId) {
-        intervalId = setInterval(getDeviceInfo, 1000);
+        intervalId = setInterval(getDeviceInfo, 10);
         getInfoButton.innerHTML = "停止获取";
         getInfoButton.classList.add("stop");
       } else {
