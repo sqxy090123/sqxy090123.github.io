@@ -4,6 +4,16 @@
   <title>获取设备信息</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #get-info-button {
+      background-color: green;
+      color: white;
+    }
+
+    #get-info-button.stop {
+      background-color: red;
+    }
+  </style>
 </head>
 <body>
   <button id="get-info-button">开始获取</button>
@@ -12,6 +22,7 @@
   <script type="text/javascript">
     var getInfoButton = document.getElementById("get-info-button");
     var result = document.getElementById("result");
+    var intervalId = null;
 
     if (!navigator) {
       result.innerHTML = "浏览器不支持该功能。";
@@ -100,7 +111,19 @@
       }
     }
 
-    getInfoButton.onclick = getDeviceInfo;
+    getInfoButton.onclick = function() {
+      if (!intervalId) {
+        intervalId = setInterval(getDeviceInfo, 1000);
+        getInfoButton.innerHTML = "停止获取";
+        getInfoButton.classList.add("stop");
+      } else {
+        clearInterval(intervalId);
+        intervalId = null;
+        result.innerHTML = "";
+        getInfoButton.innerHTML = "开始获取";
+        getInfoButton.classList.remove("stop");
+      }
+    };
 
   </script>
 </body>
