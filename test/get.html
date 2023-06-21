@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>获取设备信息</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <button onclick="getDeviceInfo()">开始获取</button>
+  <p id="result"></p>
+
+  <script type="text/javascript">
+    function getDeviceInfo() {
+      var browser = navigator.userAgent;
+      var os = navigator.platform;
+      var screenWidth = window.screen.width;
+      var screenHeight = window.screen.height;
+      var usableScreenWidth = window.screen.availWidth;
+      var usableScreenHeight = window.screen.availHeight;
+      var dpr = window.devicePixelRatio || 1;
+
+      var result = "浏览器：" + browser + "<br>";
+      result += "操作系统：" + os + "<br>";
+      result += "屏幕分辨率：" + screenWidth + " x " + screenHeight + "<br>";
+      result += "可用屏幕尺寸：" + usableScreenWidth + " x " + usableScreenHeight + "<br>";
+      result += "设备像素比：" + dpr;
+
+      document.getElementById("result").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
