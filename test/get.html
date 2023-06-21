@@ -18,14 +18,25 @@
       var usableScreenWidth = window.screen.availWidth;
       var usableScreenHeight = window.screen.availHeight;
       var dpr = window.devicePixelRatio || 1;
+      var isMobile = /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent);
+      var isOnline = navigator.onLine;
+      var language = navigator.language;
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
 
-      var result = "浏览器：" + browser + "<br>";
-      result += "操作系统：" + os + "<br>";
-      result += "屏幕分辨率：" + screenWidth + " x " + screenHeight + "<br>";
-      result += "可用屏幕尺寸：" + usableScreenWidth + " x " + usableScreenHeight + "<br>";
-      result += "设备像素比：" + dpr;
+        var result = "浏览器：" + browser + "<br>";
+        result += "操作系统：" + os + "<br>";
+        result += "屏幕分辨率：" + screenWidth + " x " + screenHeight + "<br>";
+        result += "可用屏幕尺寸：" + usableScreenWidth + " x " + usableScreenHeight + "<br>";
+        result += "设备像素比：" + dpr + "<br>";
+        result += "设备类型：" + (isMobile ? "移动设备" : "桌面设备") + "<br>";
+        result += "网络连接状态：" + (isOnline ? "已连接" : "未连接") + "<br>";
+        result += "语言设置：" + language + "<br>";
+        result += "当前位置经纬度：" + latitude + ", " + longitude;
 
-      document.getElementById("result").innerHTML = result;
+        document.getElementById("result").innerHTML = result;
+      });
     }
   </script>
 </body>
