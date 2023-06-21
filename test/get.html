@@ -28,6 +28,7 @@
       var dpr = window.devicePixelRatio || 1;
       var isMobile = /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent);
       var isOnline = navigator.onLine || false;
+      var battery = getBattery();
       var language = navigator.language || "";
       var orientation = getOrientation();
       var pos = getPosition();
@@ -41,6 +42,12 @@
       info.push("设备类型：" + (isMobile ? "移动设备" : "桌面设备"));
       info.push("网络连接状态：" + (isOnline ? "已连接" : "未连接"));
       info.push("语言设置：" + language);
+
+      if (battery !== null) {
+        info.push("电池状态：" + battery.level * 100 + "% " + (battery.charging ? "(充电中)" : ""));
+      } else {
+        info.push("电池状态：不支持或获取失败");
+      }
 
       if (pos.lat !== null && pos.lng !== null) {
         info.push("当前位置经纬度：" + pos.lat + ", " + pos.lng);
@@ -82,6 +89,15 @@
         });
       }
       return pos;
+    }
+
+    function getBattery() {
+      var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery;
+      if (battery) {
+        return battery;
+      } else {
+        return null;
+      }
     }
 
     getInfoButton.onclick = getDeviceInfo;
