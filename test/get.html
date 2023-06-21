@@ -44,6 +44,7 @@
         } else if (orientation === -90) {
           result += "#向右横屏状态" + "<br>";
         }
+        document.getElementById("result").innerHTML = result;
       });
       
       navigator.getBattery().then(function(battery) {
