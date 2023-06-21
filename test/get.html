@@ -41,7 +41,12 @@
       info.push("设备类型：" + (isMobile ? "移动设备" : "桌面设备"));
       info.push("网络连接状态：" + (isOnline ? "已连接" : "未连接"));
       info.push("语言设置：" + language);
-      info.push("当前位置经纬度：" + pos.lat + ", " + pos.lng);
+
+      if (pos.lat !== null && pos.lng !== null) {
+        info.push("当前位置经纬度：" + pos.lat + ", " + pos.lng);
+      } else {
+        info.push("当前位置经纬度：获取失败");
+      }
 
       if (orientation === 0) {
         info.push("#竖直屏幕状态");
@@ -65,11 +70,13 @@
     }
 
     function getPosition() {
-      var pos = { lat: "", lng: "" };
+      var pos = { lat: null, lng: null };
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function(position) {
-          pos.lat = position.coords.latitude;
-          pos.lng = position.coords.longitude;
+          if (position.coords && position.coords.latitude && position.coords.longitude) {
+            pos.lat = position.coords.latitude;
+            pos.lng = position.coords.longitude;
+          }
         }, function(error) {
           // 获取位置信息失败，不做任何处理
         });
