@@ -51,7 +51,7 @@
       });
       
         navigator.getBattery().then(function(battery) {
-          var result = document.getElementById("result").innerHTML;
+          var result = result
           var level = battery.level * 100 + "%"; // 电量百分比
           var charging = battery.charging; // 是否正在充电
           var chargingTime = battery.chargingTime; // 剩余充电时间（秒），-1 表示未知
