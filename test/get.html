@@ -38,6 +38,38 @@
         document.getElementById("result").innerHTML = result;
       });
     }
+
+    function getGamepads() {
+      var gamepads = navigator.getGamepads();
+      for (var i = 0; i < gamepads.length; i++) {
+        if (gamepads[i]) {
+          var id = gamepads[i].id;
+          var index = gamepads[i].index;
+          // 进一步处理游戏手柄信息
+        }
+      }
+    }
+
+    window.addEventListener("orientationchange", function() {
+      var orientation = window.orientation;
+      if (orientation === 0) {
+        alert("竖屏状态");
+      } else if (orientation === 90) {
+        alert("向左横屏状态");
+      } else if (orientation === -90) {
+        alert("向右横屏状态");
+      }
+    }, false);
+
+    function getBattery() {
+      navigator.getBattery().then(function(battery) {
+        var level = battery.level * 100 + "%"; // 电量百分比
+        var charging = battery.charging; // 是否正在充电
+        var chargingTime = battery.chargingTime; // 剩余充电时间（秒），-1 表示未知
+        var dischargingTime = battery.dischargingTime; // 剩余放电时间（秒），-1 表示未知
+        // 进一步处理电池状态信息
+      });
+    }
   </script>
 </body>
 </html>
