@@ -125,15 +125,45 @@
       var pos = { lat: null, lng: null };
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function(position) {
-          if (position.coords && position.coords.latitude && position.coords.longitude) {
-            pos.lat = position.coords.latitude;
-            pos.lng = position.coords.longitude;
-          }
+          pos.lat = position.coords.latitude;
+          pos.lng = position.coords.longitude;
         }, function(error) {
-          // 获取位置信息失败，不做任何处理
+          console.log(error);
+          // 如果通过Geolocation API获取位置信息失败则调用第三方IP定位服务
+          getIpPosition().then(function(data) {
+            pos.lat = data.latitude;
+            pos.lng = data.longitude;
+          });
+        });
+      } else {
+        console.log("Geolocation is not supported.");
+        // 如果用户的浏览器不支持Geolocation API则调用第三方IP定位服务
+        getIpPosition().then(function(data) {
+          pos.lat = data.latitude;
+          pos.lng = data.longitude;
         });
       }
       return pos;
+    }
+
+    function getIpPosition() {
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://ipapi.co/json/", true);
+        xhr.onload = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            resolve(data);
+          } else {
+            reject(xhr.statusText);
+          }
+        };
+        xhr.onerror = function() {
+          reject(xhr.statusText);
+        };
+        xhr.send();
+      });
+    }
     }
 
     function getBattery() {
