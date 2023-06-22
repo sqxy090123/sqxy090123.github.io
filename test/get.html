@@ -7,7 +7,7 @@
   <style>
     /* 页面样式 */
     .footer {
-    position: fixed;
+      position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
@@ -21,25 +21,57 @@
       text-align: center;
       padding-top: 20px;
     }
+
+    /* 新增样式 */
+    .start-button {
+      background-color: green;
+      color: white;
+    }
+
+    .stop-button {
+      background-color: red;
+      color: white;
+    }
+
+    /* 新增样式 */
+    #result-container {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <!-- 获取信息按钮 -->
-  <button id="get-info-button">开始获取</button>
-  <p id="result"></p>
+  <button id="get-info-button" class="start-button">开始获取</button>
+  <div id="result-container"></div>
 
   <script type="text/javascript">
     var getInfoButton = document.getElementById("get-info-button");
-    var result = document.getElementById("result");
+    var resultContainer = document.getElementById("result-container");
+    var isFetchingInfo = false; // 记录当前是否正在获取信息
 
     // 如果浏览器不支持，则禁用按钮
     if (!navigator) {
-      result.innerHTML = "浏览器不支持该功能。";
+      resultContainer.innerHTML = "浏览器不支持该功能。";
       getInfoButton.disabled = true;
     }
 
     // 获取设备信息的函数
     function getDeviceInfo() {
+      if (isFetchingInfo) {
+        stopFetchingInfo();
+      } else {
+        startFetchingInfo();
+      }
+    }
+
+    // 开始获取信息
+    function startFetchingInfo() {
+      isFetchingInfo = true;
+      getInfoButton.innerHTML = "终止获取";
+      getInfoButton.classList.remove("start-button");
+      getInfoButton.classList.add("stop-button");
+
       var userAgent = navigator.userAgent.toLowerCase();
 
       var isMobile = /iphone|ipod|ipad|android|windows phone|blackberry/.test(userAgent);
@@ -79,16 +111,27 @@
         var orientationInfo = getOrientation();
         var ipInfo = results[2];
 
-        result = "设备种类：" + deviceType + "<br>";
-        result += "设备型号：" + deviceModel + "<br>";
-        result += "IP 地址：" + ipInfo.ip + "<br>";
-        result += "所在地区：" + ipInfo.region + "<br>";
-        result += "电池电量：" + batteryInfo.level + "<br>";
-        result += "纬度：" + positionInfo.latitude + "<br>";
-        result += "经度：" + positionInfo.longitude + "<br>";
-        result += "方向：" + orientationInfo + "<br>";
-        document.body.innerHTML = result
+        var info = "设备种类：" + deviceType + "<br>";
+        info += "设备型号：" + deviceModel + "<br>";
+        info += "IP 地址：" + ipInfo.ip + "<br>";
+        info += "所在地区：" + ipInfo.region + "<br>";
+        info += "电池电量：" + batteryInfo.level + "<br>";
+        info += "纬度：" + positionInfo.latitude + "<br>";
+        info += "经度：" + positionInfo.longitude + "<br>";
+        info += "方向：" + orientationInfo + "<br>";
+
+        resultContainer.innerHTML = info;
       });
+    }
+
+    // 停止获取信息
+    function stopFetchingInfo() {
+      isFetchingInfo = false;
+      getInfoButton.innerHTML = "开始获取";
+      getInfoButton.classList.remove("stop-button");
+      getInfoButton.classList.add("start-button");
+
+      resultContainer.innerHTML = ""; // 清空结果
     }
 
     // 获取电池信息的函数
@@ -134,7 +177,6 @@
 
     // 绑定事件处理程序
     getInfoButton.addEventListener("click", getDeviceInfo);
-    get-Info-Button.addEventListener("click", getDeviceInfo);
   </script>
 </body>
 </html>
