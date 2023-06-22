@@ -1,115 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>获取设备信息</title>
+  <title>设备信息获取</title>
   <style>
-    /* 页面样式 */
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background-color: #3f51b5;
-      color: #fff;
-    }
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      padding-top: 20px;
-    }
-
-    /* 新增样式 */
-    .start-button {
-      background-color: green;
-      color: white;
-    }
-
-    .stop-button {
-      background-color: red;
-      color: white;
-    }
-
-    /* 新增样式 */
     #result-container {
-      margin-bottom: 10px;
-      font-size: 14px;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
-  <!-- 获取信息按钮 -->
-  <button id="get-info-button" class="start-button">开始获取</button>
+  <h2>设备信息获取</h2>
+  <button id="get-info-button">开始获取</button>
   <div id="result-container"></div>
 
-  <script type="text/javascript">
-    var getInfoButton = document.getElementById("get-info-button");
-    var resultContainer = document.getElementById("result-container");
-    var isFetchingInfo = false; // 记录当前是否正在获取信息
+  <script>
+    var getBatteryInfo = function() {
+      return navigator.getBattery().then(function(battery) {
+        return { level: battery.level !== null ? battery.level : "失败" };
+      }).catch(() => ({ level: "失败" }));
+    };
 
-    // 如果浏览器不支持，则禁用按钮
-    if (!navigator) {
-      resultContainer.innerHTML = "浏览器不支持该功能。";
-      getInfoButton.disabled = true;
-    }
+    var getPositionInfo = function() {
+      var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
 
-    // 获取设备信息的函数
-    function getDeviceInfo() {
-      if (isFetchingInfo) {
+      return new Promise(function(resolve, reject) {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+      }).then(function(position) {
+        return { latitude: position.coords.latitude, longitude: position.coords.longitude };
+      }).catch(() => ({ latitude: "失败", longitude: "失败" }));
+    };
+
+    var getOrientation = function() {
+      // 获取设备方向信息的逻辑
+      // 返回方向信息字符串
+    };
+
+    var startFetchingInfo = function() {
+      var getInfoButton = document.getElementById("get-info-button");
+      var resultContainer = document.getElementById("result-container");
+
+      if (getInfoButton.textContent === "停止获取") {
         stopFetchingInfo();
-      } else {
-        startFetchingInfo();
+        return;
       }
-    }
 
-    // 开始获取信息
-    function startFetchingInfo() {
-      isFetchingInfo = true;
-      getInfoButton.innerHTML = "终止获取";
-      getInfoButton.classList.remove("start-button");
-      getInfoButton.classList.add("stop-button");
+      getInfoButton.textContent = "停止获取";
+      getInfoButton.disabled = true;
 
-      var userAgent = navigator.userAgent.toLowerCase();
-
-      var isMobile = /iphone|ipod|ipad|android|windows phone|blackberry/.test(userAgent);
-
-      var deviceType = isMobile ? "移动设备" : "固定设备";
-
-      var deviceModel = "";
-      if (isMobile) {
-        var deviceInfo = /iphone|ipod|ipad|android/.exec(userAgent);
-        switch (deviceInfo[0]) {
-          case "iphone":
-            deviceModel = "iPhone";
-            break;
-          case "ipod":
-            deviceModel = "iPod Touch";
-            break;
-          case "ipad":
-            deviceModel = "iPad";
-            break;
-          case "android":
-            var modelInfo = /\(([^;]+); ([^\)]+)\)/.exec(userAgent);
-            deviceModel = modelInfo[1] + " " + modelInfo[2];
-            break;
-        }
-      } else {
-        deviceModel = navigator.platform;
-      }
+      var deviceType = "获取设备类型的逻辑";
+      var deviceModel = "获取设备型号的逻辑";
 
       var batteryPromise = getBatteryInfo();
       var positionPromise = getPositionInfo();
-      var ipPromise = getIpInfo();
+      var ipPromise = Promise.resolve({ ip: "获取IP地址的逻辑", region: "获取所在地区的逻辑" });
 
       Promise.all([batteryPromise, positionPromise, ipPromise]).then(function(results) {
         // 获取设备信息
-        var batteryInfo = results[0];
-        var positionInfo = results[1];
+        var batteryInfo = results[0] || { level: "失败" };
+        var positionInfo = results[1] || { latitude: "失败", longitude: "失败" };
         var orientationInfo = getOrientation();
-        var ipInfo = results[2];
+        var ipInfo = results[2] || { ip: "失败", region: "失败" };
 
         var info = "设备种类：" + deviceType + "<br>";
         info += "设备型号：" + deviceModel + "<br>";
@@ -121,62 +77,18 @@
         info += "方向：" + orientationInfo + "<br>";
 
         resultContainer.innerHTML = info;
+
+        stopFetchingInfo();
       });
-    }
 
-    // 停止获取信息
-    function stopFetchingInfo() {
-      isFetchingInfo = false;
-      getInfoButton.innerHTML = "开始获取";
-      getInfoButton.classList.remove("stop-button");
-      getInfoButton.classList.add("start-button");
-
-      resultContainer.innerHTML = ""; // 清空结果
-    }
-
-    // 获取电池信息的函数
-    function getBatteryInfo() {
-      return navigator.getBattery().then(function(battery) {
-        return {level: battery.level !== null ? battery.level : "失败"};
-      }).catch(() => ({ level: "失败" }));
-    }
-
-    // 获取设备位置信息的函数
-    function getPositionInfo() {
-      var options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
+      var stopFetchingInfo = function() {
+        getInfoButton.textContent = "开始获取";
+        getInfoButton.disabled = false;
       };
+    };
 
-      return new Promise(function(resolve, reject) {
-        navigator.geolocation.getCurrentPosition(resolve, reject, options);
-      }).then(function(position) {
-        return {latitude: position.coords.latitude, longitude: position.coords.longitude};
-      }).catch(() => ({ latitude: "失败", longitude: "失败" }));
-    }
-
-    // 获取设备方向的函数
-    function getOrientation() {
-      var alpha = null;
-      var beta = null;
-      var gamma = null;
-
-      window.addEventListener("deviceorientation", function(event) {
-        alpha = event.alpha; // z 轴旋转角度
-        beta = event.beta; // x 轴旋转角度
-        gamma = event.gamma; // y 轴旋转角度
-      }, true);
-
-      return new Promise(function(resolve, reject) {
-        setTimeout(function() {
-          resolve({alpha: alpha !== null ? alpha : "失败", beta: beta !== null ? beta : "失败", gamma: gamma !== null ? gamma : "失败"});
-        }, 2000);
-      });
-    }
-
-    // 绑定事件处理程序
-    getInfoButton.addEventListener("click", getDeviceInfo);
+    var getInfoButton = document.getElementById("get-info-button");
+    getInfoButton.addEventListener("click", startFetchingInfo);
   </script>
 </body>
 </html>
