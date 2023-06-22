@@ -5,66 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>获取设备信息</title>
     <style>
-      body {
-        -webkit-touch-callout: none; /* iOS长按不选择文本 */
-        -webkit-user-select: none; /* 禁止选择文本 */
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        cursor: default; /* 防止误操作 */
-      }
-
-      * {
-        -webkit-user-select: none; /* 禁止选择文本 */
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        -webkit-touch-callout: none; /* iOS长按不选择文本 */
-        -webkit-tap-highlight-color: rgba(0,0,0,0); /* 移动端点击无高亮 */
-        cursor: default; /* 防止误操作 */
-      }
-
-      #get-info-button {
-        background-color: green;
-        color: white;
-      }
-
-      #get-info-button.stop {
-        background-color: red;
-      }
-
-      .footer {
-        position: fixed;
-        bottom: 30px;
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        background-color: #f5f5f5;
-        text-align: center;
-        font-size: 16px;
-        overflow: hidden;
-      }
-      
-      .footer a {
-        color: #337ab7;
-        text-decoration: none;
-      }
-      
-      .footer p {
-        margin: 0;
-        padding: 0;
-      }
-
-      .footer-inner {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(245, 245, 245, 0.8);
-      }
+      /* 页面样式 */
     </style>
   </head>
   <body>
+    <!-- 警告信息 -->
+    <div id="warning-dialog" style="display:none;">
+      <p>警告：获取设备信息可能造成设备卡顿、发热、耗电过高、移动数据使用异常等情况。</p>
+      <p>是否继续？</p>
+      <button id="ok-button">确认</button>
+      <button id="cancel-button">取消</button>
+    </div>
+
+    <!-- 获取信息按钮 -->
     <button id="get-info-button">开始获取</button>
     <p id="result"></p>
 
@@ -72,6 +25,10 @@
       var getInfoButton = document.getElementById("get-info-button");
       var result = document.getElementById("result");
       var intervalId = null;
+      var warningDialog = document.getElementById("warning-dialog");
+      var okButton = document.getElementById("ok-button");
+      var cancelButton = document.getElementById("cancel-button");
+      var isWarningAccepted = false;
 
       // 如果浏览器不支持，则禁用按钮
       if (!navigator) {
@@ -81,127 +38,51 @@
 
       // 获取设备信息的函数
       function getDeviceInfo() {
+        // 检查用户是否接受了警告信息
+        if (!isWarningAccepted) {
+          warningDialog.style.display = "block";
+          return;
+        }
+
         var batteryPromise = getBatteryInfo();
         var positionPromise = getPositionInfo();
 
         Promise.all([batteryPromise, positionPromise]).then(function(results) {
-          var battery = results[0];
-          var pos = results[1];
-
-          var browser = navigator.userAgent || "";
-          var os = navigator.platform || "";
-          var screenWidth = window.screen ? window.screen.width : "";
-          var screenHeight = window.screen ? window.screen.height : "";
-          var usableScreenWidth = window.screen ? window.screen.availWidth : "";
-          var usableScreenHeight = window.screen ? window.screen.availHeight : "";
-          var dpr = window.devicePixelRatio || 1;
-          var isMobile = /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent);
-          var isOnline = navigator.onLine || false;
-          var language = navigator.language || "";
-          var orientation = getOrientation();
-
-          var info = [];
-          info.push("浏览器：" + browser);
-          info.push("操作系统：" + os);
-          info.push("屏幕分辨率：" + screenWidth + " x " + screenHeight);
-          info.push("可用屏幕尺寸：" + usableScreenWidth + " x " + usableScreenHeight);
-          info.push("设备像素比：" + dpr);
-          info.push("设备类型：" + (isMobile ? "移动设备" : "桌面设备"));
-          info.push("网络连接状态：" + (isOnline ? "已连接" : "未连接"));
-          info.push("语言设置：" + language);
-
-          if (battery !== null) {
-            info.push("电池状态：" + battery.level * 100 + "% " + (battery.charging ? "(充电中)" : ""));
-          } else {
-            info.push("电池状态：不支持或获取失败");
-          }
-
-          if (pos.lat !== null && pos.lng !== null) {
-            info.push("当前位置经纬度：" + pos.lat + ", " + pos.lng);
-          } else {
-            info.push("当前位置经纬度：获取失败");
-          }
-
-          if (orientation === 0) {
-            info.push("#竖直屏幕状态");
-          } else if (orientation === 90) {
-            info.push("#向左横屏状态");
-          } else if (orientation === -90) {
-            info.push("#向右横屏状态");
-          } else if (orientation === 180) {
-            info.push("#倒置屏幕状态");
-          }
-          
-          result.innerHTML = info.join("<br>");
+          // 获取设备信息
         });
       }
 
       // 获取电池信息的函数
       function getBatteryInfo() {
-        return new Promise(function(resolve, reject) {
-          var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery;
-          if (battery) {
-            resolve(battery);
-          } else {
-            resolve(null);
-          }
-        });
+        // 获取电池信息
       }
 
       // 获取设备位置信息的函数
       function getPositionInfo() {
-        return new Promise(function(resolve, reject) {
-          if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-              var pos = { lat: position.coords.latitude, lng: position.coords.longitude };
-              resolve(pos);
-            }, function(error) {
-              console.log(error);
-              // 如果通过Geolocation API获取位置信息失败则调用第三方IP定位服务
-              getIpPosition().then(function(data) {
-                var pos = { lat: data.latitude, lng: data.longitude };
-                resolve(pos);
-              });
-            });
-          } else {
-            console.log("Geolocation is not supported.");
-            // 如果用户的浏览器不支持Geolocation API则调用第三方IP定位服务
-            getIpPosition().then(function(data) {
-              var pos = { lat: data.latitude, lng: data.longitude };
-              resolve(pos);
-            });
-          }
-        });
+        // 获取设备位置信息
       }
 
       // 获取设备方向的函数
       function getOrientation() {
-        var orientation = window.orientation || 0;
-        if (screen && screen.orientation && screen.orientation.angle !== undefined) {
-          orientation = screen.orientation.angle;
-        }
-        return orientation;
+        // 获取设备方向
       }
 
       // 获取 IP 地理位置的函数
       function getIpPosition() {
-        return new Promise(function(resolve, reject) {
-          var xhr = new XMLHttpRequest();
-          xhr.open("GET", "https://ipapi.co/json/", true);
-          xhr.onload = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-              var data = JSON.parse(xhr.responseText);
-              resolve(data);
-            } else {
-              reject(xhr.statusText);
-            }
-          };
-          xhr.onerror = function() {
-            reject(xhr.statusText);
-          };
-          xhr.send();
-        });
+        // 获取IP地址的地理位置信息
       }
+
+      // 点击确认按钮后隐藏警告信息并设置标志变量为true
+      okButton.onclick = function() {
+        warningDialog.style.display = "none";
+        isWarningAccepted = true;
+      };
+
+      // 点击取消按钮后隐藏警告信息并设置标志变量为false
+      cancelButton.onclick = function() {
+        warningDialog.style.display = "none";
+        isWarningAccepted = false;
+      };
 
       // 按钮的点击事件处理函数
       getInfoButton.onclick = function() {
@@ -218,11 +99,7 @@
         }
       };
 
-      // 禁用复制功能
-      document.addEventListener("copy", function(e) {
-        e.preventDefault();
-        alarm("复制已被禁用");
-      });
+      // 禁用复制功能-已关闭
 
     </script>
 
