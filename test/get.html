@@ -53,12 +53,51 @@
       getInfoButton.textContent = "停止获取";
       getInfoButton.disabled = true;
 
-      var deviceType = "获取设备类型的逻辑";
-      var deviceModel = "获取设备型号的逻辑";
+      var deviceType = /Mobile|Tablet/i.test(navigator.userAgent) ? '移动设备' : '桌面设备';
+      var deviceModel = ''; // 用于存储设备型号
+      try {
+        var userAgent = navigator.userAgent;
+        var regex = /DeviceModel\/(\w+)/i;
+        var match = regex.exec(userAgent);
+        if (match && match.length > 1) {
+          deviceModel = match[1];
+        }
+      } catch (error) {
+        console.error('失败：', error);
+      }
 
       var batteryPromise = getBatteryInfo();
       var positionPromise = getPositionInfo();
-      var ipPromise = Promise.resolve({ ip: "获取IP地址的逻辑", region: "获取所在地区的逻辑" });
+      var ipPromise = fetch('https://api.ipify.org/?format=json')
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error('失败');
+          }
+          return response.json();
+        })
+        .then(function(data) {
+          var ipAddress = data.ip; // 获取IP地址
+
+          return fetch('https://ipapi.co/' + ipAddress + '/json/')
+            .then(function(response) {
+              if (!response.ok) {
+                throw new Error('失败');
+              }
+              return response.json();
+            })
+            .then(function(data) {
+              return { ip: ipAddress, region: data.city + ', ' + data.region + ', ' + data.country }; // 获取所在地区
+            })
+            .catch(function(error) {
+              console.error('失败：', error);
+              throw error;
+            });
+
+        })
+        .catch(function(error) {
+          console.error('失败：', error);
+          throw error;
+        });
 
       Promise.all([batteryPromise, positionPromise, ipPromise]).then(function(results) {
         // 获取设备信息
@@ -71,7 +110,7 @@
         info += "设备型号：" + deviceModel + "<br>";
         info += "IP 地址：" + ipInfo.ip + "<br>";
         info += "所在地区：" + ipInfo.region + "<br>";
-        info += "电池电量：" + str(int(batteryInfo.level) * 100) + "%<br>";
+        info += "电池电量：" + (parseInt(batteryInfo.level) * 100) + "%<br>";
         info += "纬度：" + positionInfo.latitude + "<br>";
         info += "经度：" + positionInfo.longitude + "<br>";
         info += "方向：" + orientationInfo + "<br>";
