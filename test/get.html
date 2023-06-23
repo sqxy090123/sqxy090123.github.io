@@ -13,8 +13,11 @@
 <body>
   <h2>设备信息获取</h2>
   <button id="get-info-button">开始获取</button>
+  <h3>
+    <span id="timer">00:00:00</span>
+  </h3>
   <div id="result-container"></div>
-  <span id="timer">00:00:00</span>
+  
 
   <script>
     var startTimer = function() {
@@ -166,6 +169,8 @@
 
         resultContainer.innerHTML = info;
 
+
+        clearInterval(timer); // 停止计时器
         stopFetchingInfo();
       });
 
