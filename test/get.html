@@ -39,6 +39,7 @@
     var getOrientation = function() {
       // 获取设备方向信息的逻辑
       // 返回方向信息字符串
+      return;
     };
 
     var startFetchingInfo = function() {
@@ -110,7 +111,7 @@
         info += "设备型号：" + deviceModel + "<br>";
         info += "IP 地址：" + ipInfo.ip + "<br>";
         info += "所在地区：" + ipInfo.region + "<br>";
-        info += "电池电量：" + (parseInt(batteryInfo.level) * 100) + "%<br>";
+        info += "电池电量：" + (parseFloat(batteryInfo.level) * 100) + "%<br>";
         info += "纬度：" + positionInfo.latitude + "<br>";
         info += "经度：" + positionInfo.longitude + "<br>";
         info += "方向：" + orientationInfo + "<br>";
