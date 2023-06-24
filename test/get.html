@@ -165,7 +165,7 @@
         info += "电池电量：" + (parseFloat(batteryInfo.level) * 100) + "%<br>";
         info += "纬度：" + positionInfo.latitude + "<br>";
         info += "经度：" + positionInfo.longitude + "<br>";
-        info += "方向：" + orientationInfo + "<br>";
+        info += "方向：" + getOrientation + "<br>";
 
         resultContainer.innerHTML = info;
 
