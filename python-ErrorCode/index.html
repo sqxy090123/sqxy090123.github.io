@@ -51,6 +51,12 @@
         }
       }
 
+      function updateURL() {
+        var searchParam = document.getElementById("searchInput").value;
+        history.pushState(null, "", "?search=" + searchParam);
+        search();
+      }
+
       function getSearchParam() {
         var urlParams = new URLSearchParams(window.location.search);
         var searchParam = urlParams.get("search");
@@ -69,7 +75,7 @@
         id="searchInput"
         placeholder="搜索关键词"
       >
-      <button onclick="location.href='?search=' + document.getElementById('searchInput').value;">搜索</button>
+      <button onclick="updateURL()">搜索</button>
     </div>
     <div>
       <p class="error-code"><a href="#-100x">-100x(禁止访问根目录及模块目录以外的目录)</a></p>
