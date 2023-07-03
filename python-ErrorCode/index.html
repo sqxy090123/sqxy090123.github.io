@@ -9,12 +9,10 @@
 
       .error-code {
         font-size: 40px;
-        display: none; /* 默认隐藏错误代码 */
       }
 
       .error-description {
         font-size: 25px;
-        display: none; /* 默认隐藏错误描述 */
       }
 
       .search-container {
@@ -31,25 +29,36 @@
     </style>
     <script>
       function search() {
-        var keyword = document.getElementById("searchInput").value; // 获取搜索栏的输入值
-        var regex = new RegExp(keyword); // 使用输入值创建正则表达式
+        var url = window.location.href; // 获取当前页面的URL
+        var searchString = url.split("?search=")[1]; // 从URL中提取search参数部分
 
-        // 遍历所有错误代码，如果匹配成功则显示对应的错误代码和描述，否则隐藏
-        var errorCodes = document.getElementsByClassName("error-code");
-        for (var i = 0; i < errorCodes.length; i++) {
-          var errorCode = errorCodes[i].innerText;
-          if (regex.test(errorCode)) {
-            errorCodes[i].style.display = "block";
-            errorCodes[i].nextElementSibling.style.display = "block";
-          } else {
-            errorCodes[i].style.display = "none";
-            errorCodes[i].nextElementSibling.style.display = "none";
+        if (searchString) {
+          var keyword = searchString.split("#")[0]; // 获取搜索关键词，忽略#符号后面的内容
+          var regex = new RegExp(keyword); // 使用搜索关键词创建正则表达式
+
+          // 遍历所有错误代码，如果匹配成功则显示对应的错误代码和描述，否则隐藏
+          var errorCodes = document.getElementsByClassName("error-code");
+          for (var i = 0; i < errorCodes.length; i++) {
+            var errorCode = errorCodes[i].innerText;
+            if (regex.test(errorCode)) {
+              errorCodes[i].style.display = "block";
+              errorCodes[i].nextElementSibling.style.display = "block";
+            } else {
+              errorCodes[i].style.display = "none";
+              errorCodes[i].nextElementSibling.style.display = "none";
+            }
           }
         }
       }
+
+      function getSearchParam() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var searchParam = urlParams.get("search");
+        return searchParam;
+      }
     </script>
   </head>
-  <body>
+  <body onload="search()"> <!-- 在页面加载完成时自动执行搜索 -->
     <div>
       <p class="title">错误代码查询</p>
     </div>
@@ -60,23 +69,30 @@
         id="searchInput"
         placeholder="搜索关键词"
       >
-      <button onclick="search()">搜索</button>
+      <button onclick="location.href='?search=' + document.getElementById('searchInput').value;">搜索</button>
     </div>
     <div>
-      <p class="error-code"><a name="-100x">-100x(禁止访问根目录及模块目录以外的目录)</a></p>
+      <p class="error-code"><a href="html/#-100x">-100x(禁止访问根目录及模块目录以外的目录)</a></p>
       <p class="error-description">向模块dll.system.check的ck分支校验的文件已经超出了根目录或模块目录以外</p>
     </div>
     <div>
-      <p class="error-code"><a name="404">404(定位失败)</a></p>
+      <p class="error-code"><a href="html/#404">404(定位失败)</a></p>
       <p class="error-description">无法找到请求的页面或资源</p>
     </div>
     <div>
-      <p class="error-code"><a name="403">403(请求被拒绝)</a></p>
+      <p class="error-code"><a href="html/#403">403(请求被拒绝)</a></p>
       <p class="error-description">服务器拒绝执行请求，权限不足</p>
     </div>
     <div>
-      <p class="error-code"><a name="405">405(无权访问)</a></p>
+      <p class="error-code"><a href="html/#405">405(无权访问)</a></p>
       <p class="error-description">请求方法不被允许访问该资源</p>
     </div>
+    <script>
+      // 读取URL中的查询参数，并将其设置为搜索框的默认值
+      var searchParam = getSearchParam();
+      if (searchParam) {
+        document.getElementById("searchInput").value = searchParam;
+      }
+    </script>
   </body>
 </html>
