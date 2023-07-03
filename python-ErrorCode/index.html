@@ -14,6 +14,11 @@
       .error-description {
         font-size: 25px;
       }
+      
+      /* 添加一个类来显示匹配的错误代码 */
+      .highlighted {
+        background-color: yellow;
+      }
 
       .search-container {
         position: absolute;
@@ -34,33 +39,55 @@
 
         if (searchString) {
           var keyword = searchString.split("#")[0]; // 获取搜索关键词，忽略#符号后面的内容
-          var regex = new RegExp(keyword); // 使用搜索关键词创建正则表达式
+          var regex = new RegExp(keyword, 'i'); // 使用搜索关键词创建正则表达式，同时忽略大小写
 
           // 遍历所有错误代码，如果匹配成功则显示对应的错误代码和描述，否则隐藏
           var errorCodes = document.getElementsByClassName("error-code");
           for (var i = 0; i < errorCodes.length; i++) {
             var errorCode = errorCodes[i].innerText;
             if (regex.test(errorCode)) {
-              errorCodes[i].style.display = "block";
+              errorCodes[i].classList.add("highlighted"); // 添加一个类来显示匹配的错误代码
               errorCodes[i].nextElementSibling.style.display = "block";
             } else {
-              errorCodes[i].style.display = "none";
+              errorCodes[i].classList.remove("highlighted"); // 移除类，隐藏非匹配的错误代码
               errorCodes[i].nextElementSibling.style.display = "none";
             }
           }
         }
+        
+        scrollToErrorCode();
       }
 
       function updateURL() {
         var searchParam = document.getElementById("searchInput").value;
-        history.pushState(null, "", "?search=" + searchParam);
-        search();
+        if (searchParam === "") {
+          window.location.href = window.location.pathname; // 清除search参数，回到原始URL
+        } else {
+          window.location.href = window.location.pathname + "?search=" + searchParam; // 更新URL的search参数
+        }
+      }
+
+      function handleKeyDown(event) {
+        if (event.keyCode === 13) { // 按下Enter键
+          updateURL();
+          event.preventDefault(); // 阻止默认的提交行为
+        }
       }
 
       function getSearchParam() {
         var urlParams = new URLSearchParams(window.location.search);
         var searchParam = urlParams.get("search");
         return searchParam;
+      }
+      
+      function scrollToErrorCode() {
+        var fragment = window.location.hash.substring(1); // 获取URL中的片段标识符（即#后的内容）
+        if (fragment) {
+          var targetElement = document.getElementById(fragment);
+          if (targetElement) {
+            targetElement.scrollIntoView(true); // 滚动到指定的错误代码行
+          }
+        }
       }
     </script>
   </head>
@@ -74,24 +101,33 @@
         class="search-bar"
         id="searchInput"
         placeholder="搜索关键词"
+        onkeydown="handleKeyDown(event)"
       >
       <button onclick="updateURL()">搜索</button>
     </div>
     <div>
-      <p class="error-code"><a href="#-100x">-100x(禁止访问根目录及模块目录以外的目录)</a></p>
+      <p class="error-code" id="-100x"><a href="#-100x">-100x(禁止访问根目录及模块目录以外的目录)</a></p>
       <p class="error-description">向模块dll.system.check的ck分支校验的文件已经超出了根目录或模块目录以外</p>
     </div>
     <div>
-      <p class="error-code"><a href="#404">404(定位失败)</a></p>
+      <p class="error-code" id="404"><a href="#404">404(定位失败)</a></p>
       <p class="error-description">无法找到请求的页面或资源</p>
     </div>
     <div>
-      <p class="error-code"><a href="#403">403(请求被拒绝)</a></p>
+      <p class="error-code" id="403"><a href="#403">403(请求被拒绝)</a></p>
       <p class="error-description">服务器拒绝执行请求，权限不足</p>
     </div>
     <div>
-      <p class="error-code"><a href="#405">405(无权访问)</a></p>
+      <p class="error-code" id="405"><a href="#405">405(无权访问)</a></p>
       <p class="error-description">请求方法不被允许访问该资源</p>
+    </div>
+    <div>
+      <p class="error-code" id="501"><a href="#501">501(不支持该服务)</a></p>
+      <p class="error-description">缺少前置模块，无法提供所请求的服务</p>
+    </div>
+    <div>
+      <p class="error-code" id="500"><a href="#500">500(模块安装错误)</a></p>
+      <p class="error-description">该模块安装时发生错误，无法完成对其的请求</p>
     </div>
     <script>
       // 读取URL中的查询参数，并将其设置为搜索框的默认值
