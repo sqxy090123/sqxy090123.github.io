@@ -9,15 +9,23 @@
 
       .error-code {
         font-size: 40px;
+        display: none; /* 默认隐藏错误代码 */
       }
 
       .error-description {
         font-size: 25px;
+        display: none; /* 默认隐藏错误描述 */
+      }
+
+      .search-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
       }
 
       .search-bar {
-        width: 75px;
-        height: 15px;
+        width: 150px;
+        height: 20px;
         font-size: 12px;
       }
     </style>
@@ -45,7 +53,7 @@
     <div>
       <p class="title">错误代码查询</p>
     </div>
-    <div>
+    <div class="search-container">
       <input
         type="text"
         class="search-bar"
@@ -55,16 +63,20 @@
       <button onclick="search()">搜索</button>
     </div>
     <div>
-      <p class="error-code">
-        <a name="-100x">
-          -100x(禁止访问根目录及模块目录以外的目录)
-        </a>
-      </p>
+      <p class="error-code"><a name="-100x">-100x(禁止访问根目录及模块目录以外的目录)</a></p>
+      <p class="error-description">向模块dll.system.check的ck分支校验的文件已经超出了根目录或模块目录以外</p>
     </div>
     <div>
-      <p class="error-description">
-        向模块dll.system.check的ck分支校验的文件已经超出了根目录或模块目录以外
-      </p>
+      <p class="error-code"><a name="404">404(定位失败)</a></p>
+      <p class="error-description">无法找到请求的页面或资源</p>
+    </div>
+    <div>
+      <p class="error-code"><a name="403">403(请求被拒绝)</a></p>
+      <p class="error-description">服务器拒绝执行请求，权限不足</p>
+    </div>
+    <div>
+      <p class="error-code"><a name="405">405(无权访问)</a></p>
+      <p class="error-description">请求方法不被允许访问该资源</p>
     </div>
   </body>
 </html>
