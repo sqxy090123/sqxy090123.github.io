@@ -2,20 +2,67 @@
 <html>
   <head>
     <title>错误代码查询-python</title>
+    <style>
+      .title {
+        font-size: 50px;
+      }
+
+      .error-code {
+        font-size: 40px;
+      }
+
+      .error-description {
+        font-size: 25px;
+      }
+
+      .search-bar {
+        width: 75px;
+        height: 15px;
+        font-size: 12px;
+      }
+    </style>
+    <script>
+      function search() {
+        var keyword = document.getElementById("searchInput").value; // 获取搜索栏的输入值
+        var regex = new RegExp(keyword); // 使用输入值创建正则表达式
+
+        // 遍历所有错误代码，如果匹配成功则显示对应的错误代码和描述，否则隐藏
+        var errorCodes = document.getElementsByClassName("error-code");
+        for (var i = 0; i < errorCodes.length; i++) {
+          var errorCode = errorCodes[i].innerText;
+          if (regex.test(errorCode)) {
+            errorCodes[i].style.display = "block";
+            errorCodes[i].nextElementSibling.style.display = "block";
+          } else {
+            errorCodes[i].style.display = "none";
+            errorCodes[i].nextElementSibling.style.display = "none";
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <div>
-      <p style="font-size: 75px">错误代码查询</p>
+      <p class="title">错误代码查询</p>
     </div>
     <div>
-      <p style="font-size: 50px">
+      <input
+        type="text"
+        class="search-bar"
+        id="searchInput"
+        placeholder="搜索关键词"
+      >
+      <button onclick="search()">搜索</button>
+    </div>
+    <div>
+      <p class="error-code">
         <a name="-100x">
           -100x(禁止访问根目录及模块目录以外的目录)
         </a>
       </p>
     </div>
     <div>
-      <p style="font-size: 35px;">
+      <p class="error-description">
         向模块dll.system.check的ck分支校验的文件已经超出了根目录或模块目录以外
       </p>
     </div>
