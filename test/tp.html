@@ -60,11 +60,8 @@
       xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           var code = xhr.status
-          if (code === 200) {
-            document.getElementById("status").textContent = "经验证，网址可访问，返回代码 200";
-          } else {
-            document.getElementById("status").textContent = "经验证，网址暂时不可访问，返回代码 " + code;
-          }
+          document.getElementById("status").textContent = "经过测试连接, 网址返回网络代码: " + xhr.status;
+          
         }
       };
       
