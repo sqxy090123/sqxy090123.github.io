@@ -40,7 +40,9 @@
     }
     const message = `您正在前往 ${url}，该网址非官方网站，是否前往？`;
     const html = `
-      <h1><div>${message}</div></h1>
+      <h1>
+      <div>${message}</div>
+      </h1>
       <h3><button onclick="goBack()">返回</button>
       <button onclick="goForward('${url}')">前往</button></h3>
     `;
@@ -56,6 +58,26 @@
     }
   }
 </script>
+<h1><p id="status"></p></h1>
+
+  <script>
+    function checkUrl() {
+      var url = document.getElementById("url-input").value;
+      var xhr = new XMLHttpRequest();
+      
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            document.getElementById("status").textContent = "经验证, 网址可访问, 返回代码200";
+          } else {
+            document.getElementById("status").textContent = "经验证, 网址暂时不可访问, 返回代码" + she.status;
+          }
+        }
+      };
+      
+      xhr.send();
+    }
 <div class="footer">
   <p>&copy; <a href="https://sqxy090123.github.io/" target="_blank">sqxy090123</a> 2023</p>
 </div>
