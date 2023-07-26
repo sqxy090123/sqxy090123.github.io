@@ -62,7 +62,8 @@
 
   <script>
     function checkUrl() {
-      var url = document.getElementById("url-input").value;
+      const params = new URLSearchParams(window.location.search);
+      let url = params.get('url');
       var xhr = new XMLHttpRequest();
       
       xhr.open('GET', url, true);
