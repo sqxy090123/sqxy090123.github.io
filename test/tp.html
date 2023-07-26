@@ -71,7 +71,7 @@
           if (xhr.status === 200) {
             document.getElementById("status").textContent = "经验证, 网址可访问, 返回代码200";
           } else {
-            document.getElementById("status").textContent = "经验证, 网址暂时不可访问, 返回代码" + she.status;
+            document.getElementById("status").textContent = "经验证, 网址暂时不可访问, 返回代码" + xhr.status;
           }
         }
       };
