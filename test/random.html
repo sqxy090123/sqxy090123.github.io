@@ -1,8 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>随机数生成器</title>
+    <style>
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-size: 120%;
+        }
+
+        .error-message {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="rangeInput" placeholder="范围（格式：最小值-最大值）"><br>
+    <input type="text" id="quantityInput" placeholder="生成数量"><br>
+    <input type="text" id="skipInput" placeholder="跳过的数字（以空格分隔）"><br>
+    <button onclick="generateRandomNumbers()">生成随机数</button>
+    <div id="result"></div>
+
     <script>
+        function closeOverlay() {
+            var overlay = document.querySelector(".overlay");
+            overlay.parentNode.removeChild(overlay);
+        }
+
+        window.addEventListener("click", function (event) {
+            var overlay = document.querySelector(".overlay");
+            if (event.target === overlay) {
+                closeOverlay();
+            }
+        });
+
         function generateRandomNumbers() {
             var range = document.getElementById("rangeInput").value;
             var quantity = parseInt(document.getElementById("quantityInput").value);
@@ -19,6 +67,26 @@
                 }
             }
 
+            if (randomNumbers.length < quantity) {
+                var overlay = document.createElement("div");
+                overlay.className = "overlay";
+
+                var errorMessage = document.createElement("div");
+                errorMessage.className = "error-message";
+                errorMessage.innerHTML = "跳过的数字过多，无法生成所需数量的随机数！";
+
+                var closeButton = document.createElement("div");
+                closeButton.className = "close-button";
+                closeButton.innerHTML = "×";
+                closeButton.addEventListener("click", closeOverlay);
+
+                errorMessage.appendChild(closeButton);
+
+                overlay.appendChild(errorMessage);
+                document.body.appendChild(overlay);
+                return;
+            }
+
             randomNumbers.sort(function () {
                 return 0.5 - Math.random();
             });
@@ -28,20 +96,5 @@
             document.getElementById("result").innerHTML = randomNumbers.join(", ");
         }
     </script>
-</head>
-<body>
-    <h1>随机数生成器</h1>
-    <label for="rangeInput">范围：</label>
-    <input type="text" id="rangeInput" placeholder="xx-xxx">
-    <br>
-    <label for="quantityInput">数量：</label>
-    <input type="number" id="quantityInput" min="1">
-    <br>
-    <label for="skipInput">跳过：</label>
-    <input type="text" id="skipInput" placeholder="用空格分隔">
-    <br>
-    <button onclick="generateRandomNumbers()">点击生成</button>
-    <br><br>
-    <div id="result"></div>
 </body>
 </html>
