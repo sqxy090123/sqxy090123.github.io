@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>随机数生成器</title>
+    <script>
+        function generateRandomNumbers() {
+            var range = document.getElementById("rangeInput").value;
+            var quantity = parseInt(document.getElementById("quantityInput").value);
+            var skipNumbers = document.getElementById("skipInput").value.split(" ").map(Number);
+
+            var min = parseInt(range.split("-")[0]);
+            var max = parseInt(range.split("-")[1]);
+
+            var randomNumbers = [];
+
+            for (var i = min; i <= max; i++) {
+                if (!skipNumbers.includes(i)) {
+                    randomNumbers.push(i);
+                }
+            }
+
+            randomNumbers.sort(function () {
+                return 0.5 - Math.random();
+            });
+
+            randomNumbers = randomNumbers.slice(0, quantity);
+
+            document.getElementById("result").innerHTML = randomNumbers.join(", ");
+        }
+    </script>
+</head>
+<body>
+    <h1>随机数生成器</h1>
+    <label for="rangeInput">范围：</label>
+    <input type="text" id="rangeInput" placeholder="xx-xxx">
+    <br>
+    <label for="quantityInput">数量：</label>
+    <input type="number" id="quantityInput" min="1">
+    <br>
+    <label for="skipInput">跳过：</label>
+    <input type="text" id="skipInput" placeholder="用空格分隔">
+    <br>
+    <button onclick="generateRandomNumbers()">点击生成</button>
+    <br><br>
+    <div id="result"></div>
+</body>
+</html>
