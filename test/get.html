@@ -135,7 +135,7 @@
           <p>设备型号：${deviceModel || '无法获取设备型号'}</p>
           <p>设备方向：${orientationInfo}</p>
           <hr>
-          <p>电池电量：${batteryInfo.level}</p>
+          <p>电池电量：${batteryInfo.level*100}%</p>
           <p>是否正在充电：${batteryInfo.isCharging}</p>
           <hr>
           <p>纬度：${gpsInfo.latitude}</p>
