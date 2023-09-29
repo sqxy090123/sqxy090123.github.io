@@ -54,8 +54,10 @@
 
     var getBatteryInfo = function() {
       return navigator.getBattery().then(function(battery) {
-        return { level: battery.level !== null ? battery.level : "失败" };
-      }).catch(() => ({ level: "失败" }));
+        var level = battery.level !== null ? battery.level : "失败";
+        var isCharging = battery.charging ? "是" : "否";
+        return { level: level, isCharging: isCharging };
+      }).catch(() => ({ level: "失败", isCharging: "失败" }));
     };
 
     var getPositionInfo = function() {
@@ -124,7 +126,7 @@
           throw error;
         });
       Promise.all([batteryPromise, positionPromise, ipPromise]).then(function(results) {
-        var batteryInfo = results[0] || { level: "失败" };
+        var batteryInfo = results[0] || { level: "失败", isCharging: "失败" };
         var positionInfo = results[1] || { latitude: "失败", longitude: "失败" };
         var orientationInfo = getOrientation();
         var ipInfo = results[2] || { ip: "失败", region: "失败" };
@@ -133,6 +135,7 @@
         info += "IP 地址：" + ipInfo.ip + "<br>";
         info += "所在地区：" + ipInfo.region + "<br>";
         info += "电池电量：" + (parseFloat(batteryInfo.level) * 100) + "%<br>";
+        info += "是否充电：" + batteryInfo.isCharging + "<br>";
         info += "纬度：" + positionInfo.latitude + "<br>";
         info += "经度：" + positionInfo.longitude + "<br>";
         info += "方向：" + orientationInfo + "<br>";
