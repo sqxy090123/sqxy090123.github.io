@@ -2,8 +2,50 @@
 <html>
   <head>
     <title>视频资源</title>
+    <style>
+      /* 覆盖层样式 */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999; /* 设置层级 */
+      }
+
+      /* 提示文本样式 */
+      .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 24px;
+        text-align: center;
+      }
+    </style>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        // 创建覆盖层元素
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+
+        // 创建提示文本元素
+        var text = document.createElement('div');
+        text.classList.add('overlay-text');
+        text.textContent = '免责声明 : 本网站只负责转载, 一切视频仅供学习, 请于下载后48小时内删除！';
+
+        // 将文本添加到覆盖层中
+        overlay.appendChild(text);
+
+        // 将覆盖层添加到body中
+        document.body.appendChild(overlay);
+      });
+    </script>
   </head>
   <body>
+    
     <div>
       <text>錬精術士コレットのHな搾精物語 第一話 コレットのアトリエ開業！ 爆乳勇者シルヴィアとの出会い [中文字幕][1080p]</text>
     </div>
