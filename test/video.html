@@ -24,6 +24,28 @@
         font-size: 24px;
         text-align: center;
       }
+
+      /* 按钮样式 */
+      .overlay-buttons {
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .overlay-buttons button {
+        margin-right: 10px;
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      .overlay-buttons button:last-child {
+        background-color: #f44336;
+      }
     </style>
     <script>
       window.addEventListener('DOMContentLoaded', function() {
@@ -36,8 +58,31 @@
         text.classList.add('overlay-text');
         text.textContent = '免责声明 : 本网站只负责转载, 一切视频仅供学习, 请于下载后48小时内删除！';
 
-        // 将文本添加到覆盖层中
+        // 创建按钮容器元素
+        var buttonsDiv = document.createElement('div');
+        buttonsDiv.classList.add('overlay-buttons');
+
+        // 创建取消按钮
+        var cancelButton = document.createElement('button');
+        cancelButton.textContent = '取消';
+        cancelButton.onclick = function() {
+          history.back();
+        };
+
+        // 创建确定按钮
+        var confirmButton = document.createElement('button');
+        confirmButton.textContent = '确定';
+        confirmButton.onclick = function() {
+          overlay.remove();
+        };
+
+        // 将按钮添加到按钮容器中
+        buttonsDiv.appendChild(cancelButton);
+        buttonsDiv.appendChild(confirmButton);
+
+        // 将文本、按钮容器添加到覆盖层中
         overlay.appendChild(text);
+        overlay.appendChild(buttonsDiv);
 
         // 将覆盖层添加到body中
         document.body.appendChild(overlay);
