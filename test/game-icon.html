@@ -10,15 +10,15 @@
       var sxcx_change = function() {
         // 获取所有class为sxcx的图片元素
         var imgs = document.querySelectorAll('.sxcx');
-        var url = imgs.getAttribute('src');
         for (var i = 0; i < imgs.length; i++) {
+          var url = imgs[i].getAttribute('src');
           // 修改图片的src属性
           if (url === "https://sqxy090123.github.io/test/game/img/时序残响.png") {
             imgs[i].src = 'https://sqxy090123.github.io/test/game/img/时序残响.share.jpg';
           } else {
             imgs[i].src = 'https://sqxy090123.github.io/test/game/img/时序残响.png';
-          };
-        };
+          }
+        }
       };
     </script>
     <div>
