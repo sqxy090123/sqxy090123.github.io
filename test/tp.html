@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <meta charset="UTF-8">
   <title>提示</title>
   <style>
@@ -52,7 +53,34 @@
     function goForward(url) {
       window.location.href = url;
     }
-
+    //
+    function checkUrl() {
+        var url = document.getElementById("url").value;
+        axios.get(url)
+          .then(function(response) {
+            document.getElementById("status").textContent = "经过测试连接, 网址可以访问";
+          })
+          .catch(function(error) {
+            if (error.response) {
+              // 请求已发出，但服务器返回状态码不在 2xx 范围内
+              if (error.response.status === 404) {
+                document.getElementById("status").textContent = "没有指定url资源";
+              } else if (error.response.status === 403) {
+                document.getElementById("status").textContent = "网站拒绝访问";
+              } else if (error.response.status === 405) {
+                document.getElementById("status").textContent = "不可用的访问方法'[post]'";
+              } else if (error.response.status === 502) {
+                document.getElementById("status").textContent = "网关错误";
+              } else {
+                document.getElementById("status").textContent = "未知错误代码: " + error.response.status);
+              }
+            } else {
+              // 请求未发出，网络错误等
+              document.getElementById("status").textContent = "请求错误: " + error.message);
+            }
+          });
+      }
+    //aaaa
     function checkUrl() {
       var xhr = new XMLHttpRequest();
       
@@ -60,7 +88,7 @@
       xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           var code = xhr.status
-          document.getElementById("status").textContent = "经过测试连接, 网址返回网络代码: " + xhr.status;
+          + xhr.status;
           
         }
       };
