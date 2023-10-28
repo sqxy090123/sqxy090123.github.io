@@ -80,22 +80,6 @@
             }
           });
       }
-    //aaaa
-    function checkUrl() {
-      var xhr = new XMLHttpRequest();
-      
-      xhr.open('GET', url, true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          var code = xhr.status
-          + xhr.status;
-          
-        }
-      };
-      
-      xhr.send();
-    }
-
     checkUrl();
   } else {
     document.title = 'Forbidden';
