@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <meta charset="UTF-8">
-  <title>提示</title>
-  <style>
-    .footer {
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8">
+    <title>提示</title>
+    <style>
+      .footer {
       position: fixed;
       bottom: 30px;
       width: 100%;
@@ -14,15 +14,15 @@
       background-color: #f5f5f5;
       text-align: center;
       font-size: 16px;
-    }
-    .footer a {
+      }
+      .footer a {
       color: #337ab7;
       text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-<script>
+      }
+    </style>
+  </head>
+  <body>
+    <script>
   const params = new URLSearchParams(window.location.search);
   let url = params.get('url');
 
@@ -91,9 +91,9 @@
     `;
     document.body.innerHTML = html;
   }
-</script>
-<div class="footer">
-  <p>&copy; <a href="https://sqxy090123.github.io/" target="_blank">sqxy090123</a> 2023</p>
-</div>
-</body>
+    </script>
+    <div class="footer">
+      <p>&copy; <a href="https://sqxy090123.github.io/" target="_blank">sqxy090123</a> 2023</p>
+    </div>
+  </body>
 </html>
