@@ -30,7 +30,27 @@
         timerElement.textContent = formattedTime;
       }, 1000);
     };
-    
+    function getDeviceModel() {
+      var userAgent = navigator.userAgent;
+      var deviceModel = "Unknown";
+
+      // 根据常见的设备型号的关键词进行匹配
+      if (userAgent.match(/iPhone/i)) {
+        deviceModel = "iPhone";
+      } else if (userAgent.match(/iPad/i)) {
+        deviceModel = "iPad";
+      } else if (userAgent.match(/Android/i)) {
+        deviceModel = "Android Device";
+      } else if (userAgent.match(/Windows Phone/i)) {
+        deviceModel = "Windows Phone";
+      } else if (userAgent.match(/Macintosh/i)) {
+        deviceModel = "Mac";
+      } else if (userAgent.match(/Windows/i)) {
+        deviceModel = "Windows PC";
+      }
+
+      return deviceModel;
+                              }
     var getOrientation = function() {
       var orientationInfo = "无法获取设备方向信息";
       if (window.DeviceOrientationEvent) {
@@ -130,6 +150,7 @@
         var batteryInfo = results[0] || { level: "失败", isCharging: "失败" };
         var gpsInfo = results[1] || { latitude: "失败", longitude: "失败" };
         var orientationInfo = getOrientation();
+        var deviceModel = getDeviceModel();
         resultContainer.innerHTML = `
           <p>设备类型：${deviceType}</p>
           <p>设备型号：${deviceModel || '无法获取设备型号'}</p>
