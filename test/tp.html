@@ -72,11 +72,11 @@
               } else if (error.response.status === 502) {
                 document.getElementById("status").textContent = "网关错误";
               } else {
-                document.getElementById("status").textContent = "未知错误代码: " + error.response.status);
+                document.getElementById("status").textContent = "未知错误代码: " + error.response.status;
               }
             } else {
               // 请求未发出，网络错误等
-              document.getElementById("status").textContent = "请求错误: " + error.message);
+              document.getElementById("status").textContent = "请求错误: " + error.message;
             }
           });
       }
