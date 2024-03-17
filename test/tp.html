@@ -55,7 +55,8 @@
     }
     //
     function checkUrl() {
-        var url = document.getElementById("url").value;
+        const params = new URLSearchParams(window.location.search);
+        let url = params.get('url');
         axios.get(url)
           .then(function(response) {
             document.getElementById("status").textContent = "经过测试连接, 网址可以访问";
