@@ -85,7 +85,8 @@
           });
       }
     checkUrl();
-  } else {
+  }
+    }} else {
     document.title = 'Forbidden';
     const html = `
       <div>
@@ -94,7 +95,6 @@
       <h3>Host input Error</h3>
     `;
     document.body.innerHTML = html;
-    }
   }
     </script>
     <div class="footer">
