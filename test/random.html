@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         .overlay {
             position: fixed;
@@ -28,6 +29,16 @@
             top: 10px;
             right: 10px;
             cursor: pointer;
+        }
+
+        footer {
+            background-color: #ccc;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
     </style>
 </head>
@@ -66,11 +77,32 @@
         function generateRandomNumbers() {
             var range = document.getElementById("rangeInput").value;
             var quantity = parseInt(document.getElementById("quantityInput").value);
-            var skipNumbers = document.getElementById("skipInput").value.split(" ").map(Number);
+            var skipInput = document.getElementById("skipInput").value.trim();
+            var skipNumbers = skipInput === "" ? [] : skipInput.split(" ").map(Number);
             var unique = document.getElementById("uniqueCheckbox").checked;
 
             var min = parseInt(range.split("-")[0]);
             var max = parseInt(range.split("-")[1]);
+
+            if (Math.max(...skipNumbers) > max || Math.min(...skipNumbers) < min) {
+                var overlay = document.createElement("div");
+                overlay.className = "overlay";
+
+                var errorMessage = document.createElement("div");
+                errorMessage.className = "error-message";
+                errorMessage.innerHTML = "跳过的数字超出范围！";
+
+                var closeButton = document.createElement("div");
+                closeButton.className = "close-button";
+                closeButton.innerHTML = "×";
+                closeButton.addEventListener("click", closeOverlay);
+
+                errorMessage.appendChild(closeButton);
+
+                overlay.appendChild(errorMessage);
+                document.body.appendChild(overlay);
+                return;
+            }
 
             var availableNumbers = [];
 
@@ -115,5 +147,9 @@
             document.getElementById("result").innerHTML = randomNumbers.join(", ");
         }
     </script>
+    <footer>
+        <p>This page is designed by <a href="https://github.com/sqxy090123">sqxy090123</a> & <a href="https://chat.openai.com">chatgpt</a></p>
+        <p>All right reserved <a href="https://github.com/sqxy090123">sqxy090123</a> & <a href="https://chat.openai.com">chatgpt</a></p>
+    </footer>
 </body>
 </html>
