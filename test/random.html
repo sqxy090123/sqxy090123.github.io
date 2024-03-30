@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -44,6 +43,9 @@
     <label for="skipInput">跳过：</label>
     <input type="text" id="skipInput" placeholder="用空格分隔">
     <br>
+    <label for="uniqueCheckbox">不重复：</label>
+    <input type="checkbox" id="uniqueCheckbox">
+    <br>
     <button onclick="generateRandomNumbers()">点击生成</button>
     <br><br>
     <div id="result"></div>
@@ -65,19 +67,20 @@
             var range = document.getElementById("rangeInput").value;
             var quantity = parseInt(document.getElementById("quantityInput").value);
             var skipNumbers = document.getElementById("skipInput").value.split(" ").map(Number);
+            var unique = document.getElementById("uniqueCheckbox").checked;
 
             var min = parseInt(range.split("-")[0]);
             var max = parseInt(range.split("-")[1]);
 
-            var randomNumbers = [];
+            var availableNumbers = [];
 
             for (var i = min; i <= max; i++) {
                 if (!skipNumbers.includes(i)) {
-                    randomNumbers.push(i);
+                    availableNumbers.push(i);
                 }
             }
 
-            if (randomNumbers.length < quantity) {
+            if (!unique && availableNumbers.length < quantity) {
                 var overlay = document.createElement("div");
                 overlay.className = "overlay";
 
@@ -97,11 +100,17 @@
                 return;
             }
 
-            randomNumbers.sort(function () {
-                return 0.5 - Math.random();
-            });
+            var randomNumbers = [];
+            var usedNumbers = [];
 
-            randomNumbers = randomNumbers.slice(0, quantity);
+            for (var i = 0; i < quantity; i++) {
+                var index = Math.floor(Math.random() * availableNumbers.length);
+                var randomNumber = availableNumbers[index];
+                randomNumbers.push(randomNumber);
+                if (!unique) {
+                    availableNumbers.splice(index, 1);
+                }
+            }
 
             document.getElementById("result").innerHTML = randomNumbers.join(", ");
         }
