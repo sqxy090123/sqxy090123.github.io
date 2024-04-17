@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索引擎</title>
+</head>
+<body>
+    <h1>搜索引擎</h1>
+    <input type="text" id="searchQuery" placeholder="请输入搜索内容">
+    <select id="searchEngine">
+        <option value="https://www.google.com/search?q=">Google</option>
+        <option value="https://cn.bing.com/search?q=">Bing</option>
+        <option value="https://www.baidu.com/s?wd=">百度</option>
+        <option value="https://www.so.com/s?q=">360搜索</option>
+        <option value="https://search.yahoo.com/search?p=">Yahoo</option>
+    </select>
+    <button onclick="search()">搜索</button>
+    <div id="searchResults"></div>
+
+    <script>
+        function search() {
+            var query = document.getElementById('searchQuery').value;
+            var engine = document.getElementById('searchEngine').value;
+            var searchUrl = engine + encodeURIComponent(query);
+            var searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = '<iframe src="' + searchUrl + '" width="100%" height="500"></iframe>';
+        }
+    </script>
+</body>
+</html>
