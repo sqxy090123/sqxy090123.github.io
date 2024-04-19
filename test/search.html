@@ -29,15 +29,14 @@
             color: red;
         }
 
-        /* 新增样式 */
         .custom-select {
             position: relative;
             display: inline-block;
-            width: 200px; /* 设置选择框的宽度 */
+            width: 200px;
         }
 
         .custom-select select {
-            display: none; /* 隐藏原生的select元素 */
+            display: none;
         }
 
         .select-selected {
@@ -89,18 +88,17 @@
     <h1>搜索引擎</h1>
     <input type="text" id="searchQuery" placeholder="请输入搜索内容">
 
-    <!-- 使用自定义的选择框 -->
     <div class="custom-select">
         <div class="select-selected" onclick="openSelect()">选择搜索引擎</div>
         <div class="select-items select-hide">
-            <div class="searchEngineItem vpn" onclick="selectEngine('https://www.google.com/search?q=')">Google</div>
-            <div class="searchEngineItem" onclick="selectEngine('https://cn.bing.com/search?q=')">必应(国内版)</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://www.google.com/search?q=')">Google</div>
+            <div class="searchEngineItem vpn" onclick="selectEngine('https://cn.bing.com/search?q=')">必应(国内版)</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.bing.com/search?q=')">Bing(国际版)</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.bing.com/search?showconv=1&q=')">Copilot</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.baidu.com/s?wd=')">百度</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.so.com/s?q=')">360搜索</div>
             <div class="searchEngineItem" onclick="selectEngine('https://search.yahoo.com/search?p=')">Yahoo</div>
-            <div class="searchEngineItem vpn" onclick="selectEngine('https://ask.com/web?q=')">ask.com</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://ask.com/web?q=')">ask.com</div>
             <div class="searchEngineItem" onclick="selectEngine('https://yandex.com/search/?text=')">Yandex</div>
         </div>
     </div>
@@ -114,6 +112,18 @@
     <script>
         var iframe;
 
+        // 网站加载时尝试读取搜索历史
+        window.onload = function() {
+            tryLoadSearchHistory();
+        };
+
+        function tryLoadSearchHistory() {
+            var searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
+            if (searchHistory && searchHistory.length > 0) {
+                alert('已经自动加载上次的搜索：' + searchHistory[0]);
+            }
+        }
+
         function search() {
             var query = document.getElementById('searchQuery').value;
             var engine = document.querySelector('.select-selected').getAttribute('data-value');
@@ -122,6 +132,8 @@
             searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchUrl + '" width="100%" height="500"></iframe>';
             iframe = document.getElementById('searchFrame');
             document.getElementById('urlInput').value = iframe.src;
+
+            saveSearchHistory(query);
         }
 
         function modifyUrl() {
@@ -129,7 +141,6 @@
             iframe.src = newUrl;
         }
 
-        // 显示/隐藏选择框
         function openSelect() {
             var x = document.querySelector('.select-items');
             if (x.classList.contains('select-hide')) {
@@ -140,7 +151,6 @@
             }
         }
 
-        // 选择搜索引擎
         function selectEngine(url) {
             var selectedEngine = document.querySelector('.select-selected');
             selectedEngine.textContent = event.target.textContent;
@@ -148,7 +158,6 @@
             closeAllSelect();
         }
 
-        // 关闭所有选择框
         function closeAllSelect(elmnt) {
             var x = document.getElementsByClassName('select-items');
             for (var i = 0; i < x.length; i++) {
@@ -158,10 +167,15 @@
             }
         }
 
-        // 关闭选择框的事件监听
         document.addEventListener('click', function(e) {
             closeAllSelect(e.target);
         });
+
+        function saveSearchHistory(query) {
+            var history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            history.unshift(query);
+            localStorage.setItem('searchHistory', JSON.stringify(history));
+        }
     </script>
 </body>
 </html>
