@@ -4,28 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>搜索引擎</title>
+    <style>
+        input[type="url"] {
+            width: 70%;
+        }
+        .searchEngineList {
+            list-style-type: none;
+            padding: 0;
+        }
+        .searchEngineItem {
+            margin-bottom: 5px;
+        }
+        .searchEngineItem a {
+            display: block;
+            padding: 5px;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #333;
+        }
+        .searchEngineItem a:hover {
+            background-color: #f0f0f0;
+        }
+        .vpn {
+            color: red;
+        }
+
+        /* 新增样式 */
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            width: 200px; /* 设置选择框的宽度 */
+        }
+
+        .custom-select select {
+            display: none; /* 隐藏原生的select元素 */
+        }
+
+        .select-selected {
+            background-color: #ccc;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .select-selected:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            margin-top: -3px;
+            border-width: 6px 6px 0 6px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .select-hide {
+            display: none;
+        }
+
+        .select-items div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .select-items div:hover {
+            background-color: #ccc;
+        }
+    </style>
 </head>
 <body>
     <h1>搜索引擎</h1>
     <input type="text" id="searchQuery" placeholder="请输入搜索内容">
-    <select id="searchEngine">
-        <option value="https://www.google.com/search?q=">Google</option>
-        <option value="https://cn.bing.com/search?q=">Bing</option>
-        <option value="https://www.baidu.com/s?wd=">百度</option>
-        <option value="https://www.so.com/s?q=">360搜索</option>
-        <option value="https://search.yahoo.com/search?p=">Yahoo</option>
-    </select>
+
+    <!-- 使用自定义的选择框 -->
+    <div class="custom-select">
+        <div class="select-selected" onclick="openSelect()">选择搜索引擎</div>
+        <div class="select-items select-hide">
+            <div class="searchEngineItem vpn" onclick="selectEngine('https://www.google.com/search?q=')">Google</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://cn.bing.com/search?q=')">必应(国内版)</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://www.bing.com/search?q=')">Bing(国际版)</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://www.bing.com/search?showconv=1&q=')">Copilot</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://www.baidu.com/s?wd=')">百度</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://www.so.com/s?q=')">360搜索</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://search.yahoo.com/search?p=')">Yahoo</div>
+            <div class="searchEngineItem vpn" onclick="selectEngine('https://ask.com/web?q=')">ask.com</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://yandex.com/search/?text=')">Yandex</div>
+        </div>
+    </div>
+
     <button onclick="search()">搜索</button>
+
+    <input type="url" id="urlInput" placeholder="修改 URL" onkeydown="if (event.keyCode == 13) modifyUrl()">
+
     <div id="searchResults"></div>
 
     <script>
+        var iframe;
+
         function search() {
             var query = document.getElementById('searchQuery').value;
-            var engine = document.getElementById('searchEngine').value;
+            var engine = document.querySelector('.select-selected').getAttribute('data-value');
             var searchUrl = engine + encodeURIComponent(query);
             var searchResults = document.getElementById('searchResults');
-            searchResults.innerHTML = '<iframe src="' + searchUrl + '" width="100%" height="500"></iframe>';
+            searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchUrl + '" width="100%" height="500"></iframe>';
+            iframe = document.getElementById('searchFrame');
+            document.getElementById('urlInput').value = iframe.src;
         }
+
+        function modifyUrl() {
+            var newUrl = document.getElementById('urlInput').value;
+            iframe.src = newUrl;
+        }
+
+        // 显示/隐藏选择框
+        function openSelect() {
+            var x = document.querySelector('.select-items');
+            if (x.classList.contains('select-hide')) {
+                closeAllSelect();
+                x.classList.remove('select-hide');
+            } else {
+                x.classList.add('select-hide');
+            }
+        }
+
+        // 选择搜索引擎
+        function selectEngine(url) {
+            var selectedEngine = document.querySelector('.select-selected');
+            selectedEngine.textContent = event.target.textContent;
+            selectedEngine.setAttribute('data-value', url);
+            closeAllSelect();
+        }
+
+        // 关闭所有选择框
+        function closeAllSelect(elmnt) {
+            var x = document.getElementsByClassName('select-items');
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != document.querySelector('.select-selected')) {
+                    x[i].classList.add('select-hide');
+                }
+            }
+        }
+
+        // 关闭选择框的事件监听
+        document.addEventListener('click', function(e) {
+            closeAllSelect(e.target);
+        });
     </script>
 </body>
 </html>
