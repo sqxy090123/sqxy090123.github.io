@@ -114,7 +114,7 @@
         }
     </style>
 </head>
-<body>
+<body version="1.0-beta">
     <h1>搜索引擎</h1>
     <input type="text" id="searchQuery" placeholder="请输入搜索内容">
 
@@ -166,7 +166,11 @@
 
         function modifyUrl() {
             var newUrl = document.getElementById('urlInput').value;
-            iframe.src = newUrl;
+            if (newUrl.indexOf("sqxy090123.github.io/test/search") !== -1) {
+                showToast("Warning! Do not trying to make a cycle. This may cause this broswer cannot use this page until you clear the data!");
+            } else {
+                iframe.src = newUrl;
+            }
         }
 
         function openSelect() {
@@ -202,15 +206,19 @@
         function saveSearchHistory(query) {
             var history = JSON.parse(localStorage.getItem('searchHistory')) || [];
             history.unshift(query);
-            history.unshift(ifframe.src);
+            history.unshift(iframe.src);
             localStorage.setItem('searchHistory', JSON.stringify(history));
         }
 
         function tryLoadSearchHistory() {
             var searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
             if (searchHistory && searchHistory.length > 0) {
-                searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchHistory[1] + '" width="100%" height="500"></iframe>';
-                showToast('已经自动加载上次的搜索：' + searchHistory[0]);
+                if (searchHistory[1].indexOf("sqxy090123.github.io/test/search") !== -1) {
+                    showToast("Warning! Do not trying to make a cycle. This may cause this broswer cannot use this page until you clear the data!");
+                } else {
+                    searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchHistory[1] + '" width="100%" height="500"></iframe>';
+                    showToast('已经自动加载上次的搜索：' + searchHistory[0]);
+                }
             }
         }
 
