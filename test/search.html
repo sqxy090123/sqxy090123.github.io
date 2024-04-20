@@ -8,6 +8,10 @@
         input[type="url"] {
             width: 70%;
         }
+        .searchEngineList {
+            list-style-type: none;
+            padding: 0;
+        }
         .searchEngineItem {
             margin-bottom: 5px;
         }
@@ -21,6 +25,20 @@
         .searchEngineItem a:hover {
             background-color: #f0f0f0;
         }
+        .vpn {
+            color: red;
+        }
+
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+        }
+
+        .custom-select select {
+            display: none;
+        }
+
         .select-selected {
             background-color: #ccc;
             padding: 5px 10px;
@@ -28,6 +46,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .select-selected:after {
             content: "";
             position: absolute;
@@ -38,6 +57,7 @@
             border-style: solid;
             border-color: #333 transparent transparent transparent;
         }
+
         .select-items {
             position: absolute;
             background-color: #f9f9f9;
@@ -48,12 +68,17 @@
             top: 100%;
             left: 0;
             right: 0;
+        }
+
+        .select-hide {
             display: none;
         }
+
         .select-items div {
             padding: 10px;
             cursor: pointer;
         }
+
         .select-items div:hover {
             background-color: #ccc;
         }
@@ -84,8 +109,8 @@
             from {bottom: 30px; opacity: 1;}
             to {bottom: 0; opacity: 0;}
         }
-        .vpn {
-            color: red;
+        div hid {
+            visibility: invisible;
         }
     </style>
 </head>
@@ -95,14 +120,14 @@
 
     <div class="custom-select">
         <div class="select-selected" onclick="openSelect()">选择搜索引擎</div>
-        <div class="select-items">
+        <div class="select-items select-hide">
             <div class="searchEngineItem vpn" onclick="selectEngine('https://www.google.com/search?q=')">Google</div>
             <div class="searchEngineItem" onclick="selectEngine('https://cn.bing.com/search?q=')">必应(国内版)</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.bing.com/search?q=')">Bing(国际版)</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.bing.com/search?showconv=1&q=')">Copilot</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.baidu.com/s?wd=')">百度</div>
             <div class="searchEngineItem" onclick="selectEngine('https://www.so.com/s?q=')">360搜索</div>
-            <div class="searchEngineItem vpn" onclick="selectEngine('https://search.yahoo.com/search?p=')">Yahoo</div>
+            <div class="searchEngineItem" onclick="selectEngine('https://search.yahoo.com/search?p=')">Yahoo</div>
             <div class="searchEngineItem vpn" onclick="selectEngine('https://ask.com/web?q=')">ask.com</div>
             <div class="searchEngineItem" onclick="selectEngine('https://yandex.com/search/?text=')">Yandex</div>
         </div>
@@ -112,24 +137,20 @@
 
     <input type="url" id="urlInput" placeholder="修改 URL" onkeydown="if (event.keyCode == 13) modifyUrl()">
 
-    <div id="searchResults"></div>
-
-    <!-- Toast消息 -->
+    <div id="searchResults">
+        <!--<iframe id="searchFrame" width="100%" height="500" disabled></iframe>-->
+    </div>
+    
     <div id="toast"></div>
+    
 
     <script>
         var iframe;
 
+        // 网站加载时尝试读取搜索历史
         window.onload = function() {
             tryLoadSearchHistory();
         };
-
-        function tryLoadSearchHistory() {
-            var searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
-            if (searchHistory && searchHistory.length > 0) {
-                showToast('已加载上次的搜索：' + searchHistory[0]);
-            }
-        }
 
         function search() {
             var query = document.getElementById('searchQuery').value;
@@ -139,6 +160,7 @@
             searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchUrl + '" width="100%" height="500"></iframe>';
             iframe = document.getElementById('searchFrame');
             document.getElementById('urlInput').value = iframe.src;
+
             saveSearchHistory(query);
         }
 
@@ -149,7 +171,12 @@
 
         function openSelect() {
             var x = document.querySelector('.select-items');
-            x.style.display = (x.style.display === 'block') ? 'none' : 'block';
+            if (x.classList.contains('select-hide')) {
+                closeAllSelect();
+                x.classList.remove('select-hide');
+            } else {
+                x.classList.add('select-hide');
+            }
         }
 
         function selectEngine(url) {
@@ -159,15 +186,17 @@
             closeAllSelect();
         }
 
-        function closeAllSelect() {
+        function closeAllSelect(elmnt) {
             var x = document.getElementsByClassName('select-items');
             for (var i = 0; i < x.length; i++) {
-                x[i].style.display = 'none';
+                if (elmnt != x[i] && elmnt != document.querySelector('.select-selected')) {
+                    x[i].classList.add('select-hide');
+                }
             }
         }
 
         document.addEventListener('click', function(e) {
-            closeAllSelect();
+            closeAllSelect(e.target);
         });
 
         function saveSearchHistory(query) {
@@ -176,11 +205,19 @@
             localStorage.setItem('searchHistory', JSON.stringify(history));
         }
 
+        function tryLoadSearchHistory() {
+            var searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
+            if (searchHistory && searchHistory.length > 0) {
+                searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchHistory[0] + '" width="100%" height="500"></iframe>';
+                showToast('已经自动加载上次的搜索：' + searchHistory[0]);
+            }
+        }
+
         function showToast(message) {
             var toast = document.getElementById('toast');
             toast.innerHTML = message;
-            toast.className = 'show';
-            setTimeout(function(){ toast.className = toast.className.replace('show', ''); }, 3000);
+            toast.classList.add('show');
+            setTimeout(function(){ toast.classList.remove('show'); }, 3000);
         }
     </script>
 </body>
