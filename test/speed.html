@@ -1,0 +1,76 @@
+<html>
+<head>
+    <title>/speed.html</title>
+    <style>
+
+        /* 样式 */
+        .loading {
+            color: purple;
+        }
+        .failure {
+            color: grey;
+        }
+        .slow {
+            color: red;
+        }
+        .medium-slow {
+            color: orange;
+        }
+        .medium {
+            color: yellow;
+        }
+        .medium-fast {
+            color: green;
+        }
+        .fast {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="hostname" placeholder="输入主机名">
+    <button onclick="checkSpeed()">检查速度</button>
+    <p id="result"></p>
+
+    <script>
+        function checkSpeed() {
+            var hostname = document.getElementById('hostname').value;
+            var resultElement = document.getElementById('result');
+            resultElement.textContext="请求中";
+            resultElement.className = "loading"
+            var startTime = new Date().getTime(); // 记录开始时间
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://' + hostname, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    var endTime = new Date().getTime(); // 记录结束时间
+                    var responseTime = endTime - startTime; // 计算响应时间
+
+                    
+                    if (xhr.status === 200) {
+                        resultElement.textContent = '主机响应速度为：' + responseTime + ' 毫秒';
+
+                        // 根据响应时间设置样式
+                        if (responseTime < 100) {
+                            resultElement.className = 'fast';
+                        } else if (responseTime < 200) {
+                            resultElement.className = 'medium-fast';
+                        } else if (responseTime < 500) {
+                            resultElement.className = 'medium';
+                        } else if (responseTime < 1000) {
+                            resultElement.className = 'medium-slow';
+                        } else {
+                            resultElement.className = 'slow';
+                        }
+                    } else {
+                        resultElement.textContent = '请求失败';
+                        resultElement.className = 'failure';
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
