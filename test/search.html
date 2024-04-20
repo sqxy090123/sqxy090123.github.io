@@ -202,13 +202,14 @@
         function saveSearchHistory(query) {
             var history = JSON.parse(localStorage.getItem('searchHistory')) || [];
             history.unshift(query);
+            history.unshift(ifframe.src);
             localStorage.setItem('searchHistory', JSON.stringify(history));
         }
 
         function tryLoadSearchHistory() {
             var searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
             if (searchHistory && searchHistory.length > 0) {
-                searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchHistory[0] + '" width="100%" height="500"></iframe>';
+                searchResults.innerHTML = '<iframe id="searchFrame" src="' + searchHistory[1] + '" width="100%" height="500"></iframe>';
                 showToast('已经自动加载上次的搜索：' + searchHistory[0]);
             }
         }
