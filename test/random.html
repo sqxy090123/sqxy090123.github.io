@@ -80,6 +80,8 @@
             var skipInput = document.getElementById("skipInput").value.trim();
             var skipNumbers = skipInput === "" ? [] : skipInput.split(" ").map(Number);
             var unique = document.getElementById("uniqueCheckbox").checked;
+            var urlParams = new URLSearchParams(window.location.search);
+            var increaseSmallProbability = urlParams.get('a') === '0'; // Check if the 'a' parameter is set to '0'
 
             var min = parseInt(range.split("-")[0]);
             var max = parseInt(range.split("-")[1]);
@@ -108,7 +110,10 @@
 
             for (var i = min; i <= max; i++) {
                 if (!skipNumbers.includes(i)) {
-                    availableNumbers.push(i);
+                    if (increaseSmallProbability && i <= (min + max) / 2) {
+                        availableNumbers.push(i);
+                    }
+                    availableNumbers.push(i); // Add the number again to increase its probability if 'a=0'
                 }
             }
 
