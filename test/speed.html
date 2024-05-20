@@ -41,7 +41,13 @@
             var startTime = new Date().getTime(); // 记录开始时间
 
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://' + hostname, true);
+            if (hostname.startsWith('https://') || hostname.startsWith('http://')) {
+                var host = hostname
+            }
+            else {
+                var host = 'http://' + hostname
+            }
+            xhr.open('GET', host, true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     var endTime = new Date().getTime(); // 记录结束时间
