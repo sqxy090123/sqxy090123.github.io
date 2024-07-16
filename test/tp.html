@@ -89,10 +89,13 @@
     }} else {
     document.title = 'Forbidden';
     const html = `
+    <!DOCTYPE html>
+    <html lang="zh-CN" onclick="history.back()">
       <div>
         <h1>403 Forbidden</h1>
       </div>
       <h3>Host input Error</h3>
+    </html>
     `;
     document.body.innerHTML = html;
   }
