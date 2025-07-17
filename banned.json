@@ -1,4 +1,5 @@
 [
   "cpro.baidu.com",
-  "?adUnit=",    // bing.com
+  "?adUnit=",
+  "<!-- up above is bing.com-->"
 ]
